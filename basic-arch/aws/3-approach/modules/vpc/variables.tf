@@ -4,12 +4,11 @@ variable "cidr_block" {
 }
 
 variable "public_subnets" {
-  description = "Public subnets in such VPC."
+  description = "List of the ids of the public subnets in such VPC."
   type        = list(string)
+}
 
-  validation {
-    condition     = length(var.public_subnets) >= 2
-    error_message = "You must have at least 2 public subnets."
-  }
-
+variable "availability_zone" {
+  description = "List of the availability zone of each public subnet."
+  type        = list(string)
 }

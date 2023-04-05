@@ -10,8 +10,8 @@ resource "aws_subnet" "public" {
   count = length(var.public_subnets)
 
   vpc_id                  = aws_vpc.this.id
-  cidr_block              = element(var.public_subnets, count.index)
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  cidr_block              = var.public_subnets[count.index]
+  availability_zone       = var.availability_zone[count.index]
   map_public_ip_on_launch = true
 
   tags = {
@@ -41,9 +41,4 @@ resource "aws_route_table_association" "public" {
 
   subnet_id      = element(aws_subnet.public[*].id, count.index)
   route_table_id = aws_route_table.public.id
-}
-
-######################################################################################
-data "aws_availability_zones" "available" {
-  state = "available"
 }

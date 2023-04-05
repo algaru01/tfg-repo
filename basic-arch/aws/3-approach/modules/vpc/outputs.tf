@@ -7,7 +7,3 @@ output "public_subnets_id" {
   description = "List of IDs of public subnets"
   value       = aws_subnet.public[*].id
 }
-
-output "name" {
-  value = data.aws_availability_zones.available
-}

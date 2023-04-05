@@ -43,6 +43,7 @@ module "vpc" {
 
   cidr_block     = "10.0.0.0/16"
   public_subnets = ["10.0.0.0/24"]
+  availability_zone = ["eu-west-1a"]
 }
 
 resource "aws_security_group" "allow_http" {
