@@ -9,7 +9,7 @@ locals {
 
 resource "aws_key_pair" "this" {
   key_name   = "myKey"
-  public_key = file("../../test_asg.pub")
+  public_key = file("${path.cwd}/test_asg.pub")
 }
 
 resource "aws_launch_template" "this" {
