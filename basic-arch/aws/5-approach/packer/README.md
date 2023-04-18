@@ -1,0 +1,1 @@
+Este código creará una AMI de AWS que configurará un Ubuntu 20.04 para tener preinstalado el entorno necesario para ejecutar un webserver. En este caso actualizará el sistema e instalará el openJDK 17.

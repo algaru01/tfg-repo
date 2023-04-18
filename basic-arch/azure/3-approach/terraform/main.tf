@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "myResourceGroup2"
+  name     = "myResourceGroup"
   location = "West Europe"
 }
 
@@ -24,7 +24,7 @@ module "vnet" {
 
   cidr_block     = "10.0.0.0/16"
   public_subnets = ["10.0.1.0/24"]
-  db_subnet      = "10.0.200.0/27" 
+  db_subnet      = "10.0.200.0/28" 
 }
 
 module "lb" {
@@ -46,7 +46,14 @@ module "ss" {
   lb_backend_address_pool_id = module.lb.backend_address_pool_id
   lb_rule = module.lb.lb_rule
 
-  server_port = 8080
+  db_address  = "my-db-flexible-server.postgres.database.azure.com" #module.db.db_address
+  db_password = "usuario" #var.db_password
+  db_user     = "password" #var.db_user
+
+  depends_on = [
+    module.db
+  ]
+
 }
 
 module "db" {
@@ -56,4 +63,7 @@ module "db" {
   location = azurerm_resource_group.this.location
   vnet_id = module.vnet.vnet_id
   database_subnet = module.vnet.db_subnet_id
+
+  db_user     = var.db_user 
+  db_password = var.db_password
 }

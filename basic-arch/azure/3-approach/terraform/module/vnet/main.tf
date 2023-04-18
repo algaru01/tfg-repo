@@ -34,7 +34,9 @@ resource "azurerm_subnet" "db" {
 }
 
 resource "azurerm_network_security_group" "public" {
-  name                = "myPublicSecurityGroup"
+  count = length(var.public_subnets) > 0 ? 1 : 0
+
+  name                = "public-subnets-sg"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -68,22 +70,9 @@ resource "azurerm_network_security_group" "public" {
 resource "azurerm_network_security_group" "db" {
   count = var.db_subnet != null ? 1 : 0
 
-  name                = "myDBSecurityGroup"
+  name                = "db-subnet-sg"
   resource_group_name = var.resource_group_name
   location            = var.location
-
-  security_rule {
-    name                       = "SSH"
-    description                = "Allow SSH traffic."
-    priority                   = 1001
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_port_range     = 22
-    destination_address_prefix = "*"
-  }
 
   security_rule {
     name                       = "Server"
@@ -102,7 +91,7 @@ resource "azurerm_network_security_group" "db" {
 resource "azurerm_subnet_network_security_group_association" "public" {
   count                     = length(var.public_subnets)
   subnet_id                 = element(azurerm_subnet.public[*].id, count.index)
-  network_security_group_id = azurerm_network_security_group.public.id
+  network_security_group_id = azurerm_network_security_group.public[0].id
 }
 
 resource "azurerm_subnet_network_security_group_association" "db" {

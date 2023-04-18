@@ -28,3 +28,18 @@ variable "lb_rule" {
   description = "Id of a Load Balancer rule."
   type = string
 }
+
+variable "db_address" {
+  description = "Address of the database."
+  type        = string
+}
+
+variable "db_user" {
+  description = "User of the database."
+  type        = string
+}
+
+variable "db_password" {
+  description = "Password of the database."
+  type        = string
+}

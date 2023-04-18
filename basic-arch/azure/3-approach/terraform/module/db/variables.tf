@@ -17,3 +17,14 @@ variable "vnet_id" {
   description = "Id of the main VNet."
   type        = string
 }
+
+variable "db_user" {
+  description = "User of the database."
+  type        = string
+}
+
+variable "db_password" {
+  description = "Password of the database."
+  type        = string
+  sensitive   = true
+}
