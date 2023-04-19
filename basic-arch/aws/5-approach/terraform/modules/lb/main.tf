@@ -36,16 +36,6 @@ resource "aws_security_group_rule" "allow_http_inbound" {
   cidr_blocks = local.all_ips
 }
 
-resource "aws_security_group_rule" "allow_ssh_inbound" {
-  type              = "ingress"
-  security_group_id = aws_security_group.this.id
-
-  from_port   = 22
-  to_port     = 22
-  protocol    = "tcp"
-  cidr_blocks = local.all_ips
-}
-
 resource "aws_security_group_rule" "allow_all_outbound" {
   type              = "egress"
   security_group_id = aws_security_group.this.id
@@ -103,7 +93,7 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path                = "/"
+    path                = "/api/v1/student/hello"
     protocol            = local.http_protocol
     matcher             = "200"
     interval            = 15

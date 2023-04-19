@@ -1,12 +1,5 @@
-# 4 Acercamiento
-En este apartado se inlcuirá una base de datos al diseño. Para ello, se ha desarrollado un nuevo módulo llamado 'db' que creará un RDS de postgres con una base de datos 'student' y un usuario y contraseña que será pasado al crear el recurso.
-Por seguridad, se ha situado esta base de datos en una subnet privada de modo que quedará aislada del tráfico fuera de su VPC y solo podrá ser accedida por las instancias de EC2 que definimos antes en la subnet pública. Además, en su gurpo de seguridad se ha definido que únicamente aceptará tráfico en el puerto donde recibe peticiones la base de datos.
+# 5 Acercamiento
+Hasta ahora, las instancias de EC2 no se encontraban en una red privada, y si bien limitabamos el tráfico entrante en estas para permitir únicamente la entrada al puerto del servidor y a SSH, lo mejor sería eliminar cualquier posibilidad de que estas máquinas puedan ser accedidas desde el servidor.
 
-Además, para este nuevo nivel se ha desarrollado un código que haga uso de la base de datos (por defecto tendrá 2 estudiatnes) con los siguientes endpoints:
-    * GET /api/v1/student/ devolverá la lista de estudiantes en la base de datos.
-    * POST /api/v1/student/ permitirá añadir un estudiante a la base de datos.
-    * DELETE /api/v1/student/{studentID} borrará el estudiante con dicho ID.
-    * PUT /api/v1/student/{studentID} permitirá modificar datos de dicho estudiante.
-    * GET /api/v1/student/hello devolverá un hola mundo.
-
-Para desplegar este código en las instancias de EC2 se ha hecho uso de una herramienta llamada 'Packer' de creación de plantillas de servidor. Esta herramienta de los mismos desarrolladores de Terraform, usa también HCL y te permite crear las imágenes que correrán en las máquinas virtuales, en este casi las AMI.
+Para ello, se han añadido más redes privadas y se han cambiado las EC2 a estas, por lo que ya no tendrán una IP pública y no podrán ser accedidas a través de Internet. Conforme esto, se ha añadido un nodo jumpbox a través del cual nos será podible conectar mediante SSH a aquellas instancias de EC2. De este modo, se ha añadido una red única para este host y se ha incluido un nuevo módulo que crea dicho nodo. Este consistirá en otra EC2 dentro de una red pública de la VPC, y que por lo tanto podrá conectarso con las máquinas del ASG, y con unas reglas de seguirdad que únicamente le permitan ser accedido desde internet mediante SSH. 
+Así, cualquiera que quiera acceder a las EC2 del ASG desde internet, deberá primeramente pasar el filtro que se establezca dentro del nodo jumpbox.

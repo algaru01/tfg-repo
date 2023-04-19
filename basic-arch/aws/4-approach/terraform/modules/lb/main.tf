@@ -103,7 +103,7 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path                = "/"
+    path                = "/api/v1/student/hello"
     protocol            = local.http_protocol
     matcher             = "200"
     interval            = 15
