@@ -46,9 +46,9 @@ module "ss" {
   lb_backend_address_pool_id = module.lb.backend_address_pool_id
   lb_rule = module.lb.lb_rule
 
-  db_address  = "my-db-flexible-server.postgres.database.azure.com" #module.db.db_address
-  db_password = "usuario" #var.db_password
-  db_user     = "password" #var.db_user
+  db_address  = module.db.db_address//"my-db-flexible-server.postgres.database.azure.com" #module.db.db_address
+  db_password = var.db_password//"usuario" #var.db_password
+  db_user     = var.db_user//"password" #var.db_user
 
   depends_on = [
     module.db
