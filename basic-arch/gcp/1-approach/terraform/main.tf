@@ -21,8 +21,8 @@ module "vm" {
   server_port = var.server_port
 }
 
-resource "google_compute_firewall" "flask" {
-  name    = "flask-app-firewall"
+resource "google_compute_firewall" "allow_server_port" {
+  name    = "server-firewall"
   network = "default"
 
   allow {
