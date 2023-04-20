@@ -15,28 +15,10 @@ provider "google" {
   zone    = "europe-southwest1-a"
 }
 
-resource "google_compute_instance" "this" {
-  name         = "my-instance"
-  machine_type = "e2-micro"
+module "vm" {
+  source = "./modules/vm"
 
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
-    }
-  }
-
-  network_interface {
-    # A default network is created for all GCP projects
-    network = "default"
-    access_config {
-    }
-  }
-
-  metadata_startup_script = file("${path.cwd}/../scripts/init-script.sh")
-
-  metadata = {
-    ssh-keys = "ubuntu:${file("${path.cwd}/test_asg.pub")}"
-  }
+  server_port = var.server_port
 }
 
 resource "google_compute_firewall" "flask" {
@@ -45,7 +27,7 @@ resource "google_compute_firewall" "flask" {
 
   allow {
     protocol = "tcp"
-    ports    = ["8080"]
+    ports    = [var.server_port]
   }
   source_ranges = ["0.0.0.0/0"]
 }
