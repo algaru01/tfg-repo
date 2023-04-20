@@ -8,18 +8,20 @@ terraform {
 }
 
 provider "google" {
-  project = "basic-arch"
-  region  = "europe-west1"
-  zone    = "europe-west1-b"
+  credentials = file("../../credentials/basic-arch-384210-f9d25d4a7b5e.json")
+
+  project = "basic-arch-384210"
+  region  = "europe-southwest1"
+  zone    = "europe-southwest1-a"
 }
 
-resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-instance"
+resource "google_compute_instance" "this" {
+  name         = "my-instance"
   machine_type = "e2-micro"
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 
@@ -29,4 +31,21 @@ resource "google_compute_instance" "vm_instance" {
     access_config {
     }
   }
+
+  metadata_startup_script = file("${path.cwd}/../scripts/init-script.sh")
+
+  metadata = {
+    ssh-keys = "ubuntu:${file("${path.cwd}/test_asg.pub")}"
+  }
+}
+
+resource "google_compute_firewall" "flask" {
+  name    = "flask-app-firewall"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
+  source_ranges = ["0.0.0.0/0"]
 }
