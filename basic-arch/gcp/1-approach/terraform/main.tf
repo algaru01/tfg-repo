@@ -8,11 +8,17 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("../../credentials/basic-arch-384210-f9d25d4a7b5e.json")
+  credentials = file("../../credentials/basic-arch-384210.json")
 
   project = "basic-arch-384210"
   region  = "europe-southwest1"
   zone    = "europe-southwest1-a"
+}
+
+module "services" {
+  source = "./modules/services"
+
+  services = [ "compute.googleapis.com" ]
 }
 
 module "vm" {
