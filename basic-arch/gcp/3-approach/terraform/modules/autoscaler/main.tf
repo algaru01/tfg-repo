@@ -1,3 +1,7 @@
+data "google_service_account" "this" {
+  account_id   = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
+}
+
 resource "google_compute_instance_template" "this" {
   name           = "my-instance-template"
   machine_type   = "e2-micro"
@@ -15,7 +19,13 @@ resource "google_compute_instance_template" "this" {
   metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
 
   metadata = {
-    ssh-keys = "ubuntu:${file("${path.cwd}/test_asg.pub")}"
+    ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
+  }
+
+  service_account {
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    email  = data.google_service_account.this.email
+    scopes = ["cloud-platform"]
   }
 }
 
@@ -26,8 +36,13 @@ resource "google_compute_instance_group_manager" "this" {
     instance_template = google_compute_instance_template.this.id
   }
 
-  target_pools       = [google_compute_target_pool.this.id]
   base_instance_name = "autoscaler-sample"
+
+  auto_healing_policies {
+    health_check      = google_compute_health_check.this.id
+    initial_delay_sec = 300
+  }
+
 }
 
 resource "google_compute_autoscaler" "default" {
@@ -38,16 +53,18 @@ resource "google_compute_autoscaler" "default" {
     max_replicas    = 4
     min_replicas    = 2
     cooldown_period = 60
-
-/*     metric {
-      name                       = "pubsub.googleapis.com/subscription/num_undelivered_messages"
-      filter                     = "resource.type = pubsub_subscription AND resource.label.subscription_id = our-subscription"
-      single_instance_assignment = 65535
-    } */
   }
 }
 
+resource "google_compute_health_check" "this" {
+  name                = "autohealing-health-check"
+  check_interval_sec  = 5
+  timeout_sec         = 5
+  healthy_threshold   = 2
+  unhealthy_threshold = 10 # 50 seconds
 
-resource "google_compute_target_pool" "this" {
-  name = "my-target-pool"
+  http_health_check {
+    request_path = "/"
+    port         = var.server_port
+  }
 }
