@@ -29,9 +29,16 @@ module "vpc" {
   server_port = var.server_port
 }
 
-module "autoscaler" {
-  source = "./modules/autoscaler"
+module "mig" {
+  source = "./modules/mig"
 
   server_port = var.server_port
   subnet = module.vpc.public_subnets[0]
+}
+
+module "lb" {
+  source = "./modules/lb"
+
+  server_port = var.server_port
+  instance_group = module.mig.instance_group
 }
