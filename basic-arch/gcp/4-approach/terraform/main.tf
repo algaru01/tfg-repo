@@ -49,4 +49,8 @@ module "lb" {
 
 module "db" {
   source = "./modules/db"
+
+  vpc = module.vpc.vpc
+  db_user = var.db_user
+  db_password = var.db_password
 }

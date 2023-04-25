@@ -3,7 +3,7 @@ output "public_subnets" {
   value       = google_compute_subnetwork.public[*].self_link
 }
 
-output "public_subnets_url" {
-  description = "List of public subnets."
-  value       = google_compute_subnetwork.public[*].id
+output "vpc" {
+  description = "ID of the VPC created."
+  value = google_compute_network.this.id
 }
