@@ -1,9 +1,3 @@
 #!/bin/bash
 
-sudo echo "hola" >> /home/ubuntu/prueba.txt
-
-cat > index.html <<EOF
-<h1>Hello, World</h1>
-EOF
-
-nohup busybox httpd -f -p ${server_port} &
+nohup java -jar /home/ubuntu/src/demo-1.0.0-SNAPSHOT.jar --spring.datasource.url=jdbc:postgresql://${db_address}:5432/student --spring.datasource.username=${db_user} --spring.datasource.password=${db_password} &

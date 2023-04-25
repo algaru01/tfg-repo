@@ -13,3 +13,19 @@ variable "service_email" {
   type        = string
   default     = "terraform@basic-arch-384210.iam.gserviceaccount.com"
 }
+
+variable "db_address" {
+  description = "Address to which connect to the database"
+  type        = string
+}
+
+variable "db_user" {
+  description = "User of the database"
+  type        = string
+}
+
+variable "db_password" {
+  description = "Password of the user of the database"
+  type        = string
+  sensitive   = true
+}

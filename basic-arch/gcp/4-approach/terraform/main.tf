@@ -34,6 +34,10 @@ module "mig" {
 
   server_port = var.server_port
   subnet = module.vpc.public_subnets[0]
+
+  db_address     = module.db.db_address
+  db_user        = var.db_user
+  db_password = var.db_password 
 }
 
 module "lb" {

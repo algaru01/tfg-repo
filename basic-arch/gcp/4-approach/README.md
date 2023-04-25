@@ -8,6 +8,14 @@ Y finalmente se crea la conexión privada con 'google_service_networking_connect
 
 Una vez creada la instancia de la base de datos y la conexión a esta, será posible crear las bases de datos que se quieran con 'google_sql_database' y los usuarios con 'google_sql_database'
 
+
+Además, se ha creado una imagen con Packer con un entorno preparado para desplegar una aplicación que haga uso de la base de datos (por defecto tendrá 2 estudiatnes) con los siguientes endpoints:
+    * GET /api/v1/student/ devolverá la lista de estudiantes en la base de datos.
+    * POST /api/v1/student/ permitirá añadir un estudiante a la base de datos.
+    * DELETE /api/v1/student/{studentID} borrará el estudiante con dicho ID.
+    * PUT /api/v1/student/{studentID} permitirá modificar datos de dicho estudiante.
+    * GET /api/v1/student/hello devolverá un hola mundo.
+
 ## Recursos
 https://cloud.google.com/vpc/docs/private-services-access?hl=es-419#private-services-supported-services
 https://cloud.google.com/sql/docs/postgres/connect-compute-engine?hl=es-419

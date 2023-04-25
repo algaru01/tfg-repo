@@ -1,6 +1,13 @@
 resource "google_sql_database" "this" {
   name     = "my-db"
   instance = google_sql_database_instance.this.name
+
+}
+
+resource "google_sql_database" "student" {
+  name     = "student"
+  instance = google_sql_database_instance.this.name
+
 }
 
 resource "google_compute_global_address" "this" {
@@ -22,20 +29,13 @@ resource "google_sql_database_instance" "this" {
   database_version = "POSTGRES_13"
 
   settings {
-    # Second-generation instance tiers are based on the machine
-    # type. See argument reference below.
     tier = "db-f1-micro"
+
     ip_configuration {
       ipv4_enabled = false
       private_network = var.vpc
-      enable_private_path_for_google_cloud_services = true
+      //enable_private_path_for_google_cloud_services = true
     }
-
-/*     ip_configuration {
-      authorized_networks {
-        value = "10.0.0.0/16"
-      }
-    } */
   }
 
   root_password = "password"
@@ -46,7 +46,7 @@ resource "google_sql_database_instance" "this" {
 }
 
 resource "google_sql_user" "this" {
-  name     = var.d_user
+  name     = var.db_user
   instance = google_sql_database_instance.this.name
-  password = var.sb_password
+  password = var.db_password
 }

@@ -7,7 +7,7 @@ resource "google_compute_instance_template" "this" {
   machine_type   = "e2-micro"
 
   disk {
-    source_image = "ubuntu-os-cloud/ubuntu-1804-lts"
+    source_image = "packer-1682412407" #"ubuntu-os-cloud/ubuntu-1804-lts"
   }
 
   network_interface {
@@ -16,7 +16,11 @@ resource "google_compute_instance_template" "this" {
     }
   }
 
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {
+    db_address  = var.db_address,
+    db_user     = var.db_user,
+    db_password = var.db_password
+    })
 
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
@@ -42,6 +46,10 @@ resource "google_compute_instance_group_manager" "this" {
     health_check      = google_compute_health_check.this.id
     initial_delay_sec = 300
   }
+
+  depends_on = [
+    google_compute_instance_template.this
+  ]
 
 }
 
