@@ -8,8 +8,8 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Id of the subnet where this VM is deployed."
+variable "ss_subnet" {
+  description = "Id of the subnet where this Scale Set is deployed."
   type        = string
 }
 

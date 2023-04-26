@@ -40,7 +40,9 @@ module "ss" {
 
   resource_group_name        = azurerm_resource_group.this.name
   location                   = azurerm_resource_group.this.location
-  subnet_id                  = module.vnet.subnets_id[0]
+
+  ss_subnet                  = module.vnet.subnets_id[0]
+
   lb_backend_address_pool_id = module.lb.backend_address_pool_id
   lb_rule                    = module.lb.lb_rule
 

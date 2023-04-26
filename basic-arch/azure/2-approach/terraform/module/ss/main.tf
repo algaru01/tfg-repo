@@ -8,7 +8,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
 
   admin_ssh_key {
     username   = "ubuntu"
-    public_key = file("${path.cwd}/test_asg.pub")
+    public_key = file("${path.cwd}/../../ss_key.pub")
   }
 
   os_disk {

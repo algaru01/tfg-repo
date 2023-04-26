@@ -17,7 +17,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
 
   admin_ssh_key {
     username   = "ubuntu"
-    public_key = file("${path.cwd}/test_asg.pub")
+    public_key = file("${path.cwd}/../../ssh-keys/ss_key.pub")
   }
 
   os_disk {
@@ -42,9 +42,9 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   }
 
   custom_data = base64encode(templatefile("${path.cwd}/../scripts/launch-server.sh", {
-    db_address  = var.db_address  //"my-db-flexible-server.postgres.database.azure.com" #var.db_address,
-    db_user     = var.db_user     //"usuario" #var.db_user,
-    db_password = var.db_password //"password" #var.db_password
+    db_address  = var.db_address
+    db_user     = var.db_user
+    db_password = var.db_password
   }))
 
   depends_on = [
