@@ -26,7 +26,7 @@ resource "aws_security_group" "this" {
 
 resource "aws_key_pair" "this" {
   key_name   = "myJumpboxKey"
-  public_key = file("${path.cwd}/test_jumpbox.pub")
+  public_key = file("${path.cwd}/../../ssh-keys/test_jumpbox.pub")
 }
 
 resource "aws_instance" "jumpbox" {
