@@ -8,11 +8,6 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Id of the subnet where this VM is deployed."
-  type        = string
-}
-
 variable "server_port" {
   description = "Port where the server will run."
   type        = number

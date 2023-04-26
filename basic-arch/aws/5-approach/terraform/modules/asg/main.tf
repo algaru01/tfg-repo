@@ -1,10 +1,10 @@
 locals {
-  ssh_port     = 22
-  any_port     = 0
-  tcp_protocol = "tcp"
+  ssh_port      = 22
+  any_port      = 0
+  tcp_protocol  = "tcp"
   icmp_protocol = "icmp"
-  any_protocol = -1
-  all_ips      = ["0.0.0.0/0"]
+  any_protocol  = -1
+  all_ips       = ["0.0.0.0/0"]
 }
 
 resource "aws_key_pair" "this" {
@@ -30,7 +30,7 @@ resource "aws_launch_template" "this" {
 }
 
 resource "aws_autoscaling_group" "this" {
-  name = "myAutoscalingGroup"
+  name                = "myAutoscalingGroup"
   vpc_zone_identifier = var.public_subnets_id
   target_group_arns   = var.target_group_arns
 

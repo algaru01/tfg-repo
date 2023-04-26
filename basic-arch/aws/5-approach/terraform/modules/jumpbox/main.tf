@@ -33,13 +33,13 @@ resource "aws_instance" "jumpbox" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
 
-  key_name = aws_key_pair.this.key_name 
-  vpc_security_group_ids = [aws_security_group.this.id]
-  subnet_id = var.jumpbox_subnet
+  key_name                    = aws_key_pair.this.key_name
+  vpc_security_group_ids      = [aws_security_group.this.id]
+  subnet_id                   = var.jumpbox_subnet
   associate_public_ip_address = true
 
   tags = {
-    name  = "myJumpbox"
+    name = "myJumpbox"
   }
 }
 

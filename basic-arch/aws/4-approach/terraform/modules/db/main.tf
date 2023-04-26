@@ -1,8 +1,8 @@
 locals {
-  any_port      = 0
-  any_protocol  = -1
-  tcp_protocol  = "tcp"
-  all_ips       = ["0.0.0.0/0"]
+  any_port     = 0
+  any_protocol = -1
+  tcp_protocol = "tcp"
+  all_ips      = ["0.0.0.0/0"]
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -22,10 +22,10 @@ resource "aws_security_group" "allow_all_inbound" {
     from_port   = var.port
     to_port     = var.port
     protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips     #Quizás poner la subnet pública del asg?
+    cidr_blocks = local.all_ips #Quizás poner la subnet pública del asg?
   }
 
-/*   egress {
+  /*   egress {
     from_port   = local.any_port
     to_port     = local.any_port
     protocol    = local.any_protocol

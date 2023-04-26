@@ -24,15 +24,14 @@ module "vnet" {
 
   cidr_block     = "10.0.0.0/16"
   public_subnets = ["10.0.1.0/24"]
-  db_subnet      = "10.0.200.0/28" 
+  db_subnet      = "10.0.200.0/28"
 }
 
 module "lb" {
   source = "./module/lb"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
+  location            = azurerm_resource_group.this.location
 
   server_port = 8080
 }
@@ -41,14 +40,16 @@ module "ss" {
   source = "./module/ss"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
-  lb_backend_address_pool_id = module.lb.backend_address_pool_id
-  lb_rule = module.lb.lb_rule
+  location            = azurerm_resource_group.this.location
 
-  db_address  = module.db.db_address//"my-db-flexible-server.postgres.database.azure.com" #module.db.db_address
-  db_password = var.db_password//"usuario" #var.db_password
-  db_user     = var.db_user//"password" #var.db_user
+  ss_subnet = module.vnet.subnets_id[0]
+
+  lb_backend_address_pool_id = module.lb.backend_address_pool_id
+  lb_rule                    = module.lb.lb_rule
+
+  db_address  = module.db.db_address //"my-db-flexible-server.postgres.database.azure.com" #module.db.db_address
+  db_password = var.db_password      //"usuario" #var.db_password
+  db_user     = var.db_user          //"password" #var.db_user
 
   depends_on = [
     module.db
@@ -60,10 +61,10 @@ module "db" {
   source = "./module/db"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  vnet_id = module.vnet.vnet_id
-  database_subnet = module.vnet.db_subnet_id
+  location            = azurerm_resource_group.this.location
+  vnet_id             = module.vnet.vnet_id
+  database_subnet     = module.vnet.db_subnet_id
 
-  db_user     = var.db_user 
+  db_user     = var.db_user
   db_password = var.db_password
 }

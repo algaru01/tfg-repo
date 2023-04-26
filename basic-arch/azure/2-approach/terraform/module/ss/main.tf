@@ -24,14 +24,14 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   }
 
   network_interface {
-    name = "myNIC"
+    name    = "myNIC"
     primary = true
     ip_configuration {
-     name                                   = "IPConfiguration"
-     subnet_id                              = var.subnet_id
-     load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
-     primary = true
-     public_ip_address {
+      name                                   = "IPConfiguration"
+      subnet_id                              = var.subnet_id
+      load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
+      primary                                = true
+      public_ip_address {
         name = "temporal-ip-address"
       }
     }

@@ -1,5 +1,5 @@
 data "azurerm_resource_group" "image" {
-  name                = "myPackerImages"
+  name = "myPackerImages"
 }
 
 data "azurerm_image" "image" {
@@ -28,23 +28,23 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   source_image_id = data.azurerm_image.image.id
 
   network_interface {
-    name = "myNIC"
+    name    = "myNIC"
     primary = true
     ip_configuration {
-     name                                   = "IPConfiguration"
-     subnet_id                              = var.subnet_id
-     load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
-     primary = true
-     public_ip_address {
+      name                                   = "IPConfiguration"
+      ss_subnet                              = var.ss_subnet
+      load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
+      primary                                = true
+      public_ip_address {
         name = "temporal-ip-address"
       }
     }
   }
 
   custom_data = base64encode(templatefile("${path.cwd}/../scripts/launch-server.sh", {
-    db_address  = var.db_address//"my-db-flexible-server.postgres.database.azure.com" #var.db_address,
-    db_user     = var.db_user//"usuario" #var.db_user,
-    db_password = var.db_password//"password" #var.db_password
+    db_address  = var.db_address  //"my-db-flexible-server.postgres.database.azure.com" #var.db_address,
+    db_user     = var.db_user     //"usuario" #var.db_user,
+    db_password = var.db_password //"password" #var.db_password
   }))
 
   depends_on = [

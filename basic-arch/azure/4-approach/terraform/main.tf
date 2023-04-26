@@ -22,17 +22,17 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 
-  cidr_block     = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24"]
-  bastion_subnet = "10.0.200.0/27"
+  cidr_block      = "10.0.0.0/16"
+  private_subnets = ["10.0.1.0/24"]
+  bastion_subnet  = "10.0.200.0/27"
+  db_subnet       = "10.0.201.0/28"
 }
 
 module "lb" {
   source = "./module/lb"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
+  location            = azurerm_resource_group.this.location
 
   server_port = 8080
 }
@@ -41,18 +41,40 @@ module "ss" {
   source = "./module/ss"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
-  lb_backend_address_pool_id = module.lb.backend_address_pool_id
-  lb_rule = module.lb.lb_rule
+  location            = azurerm_resource_group.this.location
 
-  server_port = 8080
+  ss_subnet = module.vnet.private_subnets[0]
+
+  lb_backend_address_pool_id = module.lb.backend_address_pool_id
+  lb_rule                    = module.lb.lb_rule
+
+  db_address  = module.db.db_address
+  db_password = var.db_password
+  db_user     = var.db_user
+
+  depends_on = [
+    module.db
+  ]
+}
+
+module "db" {
+  source = "./module/db"
+
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  vnet_id         = module.vnet.vnet_id
+  database_subnet = module.vnet.database_subnet
+
+  db_user     = var.db_user
+  db_password = var.db_password
 }
 
 module "bastion" {
   source = "./module/bastion"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.bastion_subnet_id
+  location            = azurerm_resource_group.this.location
+
+  bastion_subnet = module.vnet.bastion_subnet
 }

@@ -21,10 +21,10 @@ variable "server_port" {
 
 variable "lb_backend_address_pool_id" {
   description = "Id of Load Balancer backend address pool."
-  type = string
+  type        = string
 }
 
 variable "lb_rule" {
   description = "Id of a Load Balancer rule."
-  type = string
+  type        = string
 }

@@ -8,8 +8,8 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Id of the subnet where this VM is deployed."
+variable "ss_subnet" {
+  description = "Id of the subnet where this Scaling Set is deployed."
   type        = string
 }
 
@@ -20,9 +20,26 @@ variable "server_port" {
 }
 
 variable "lb_backend_address_pool_id" {
-  type = string
+  description = "Id of Load Balancer backend address pool."
+  type        = string
 }
 
 variable "lb_rule" {
-  type = string
+  description = "Id of a Load Balancer rule."
+  type        = string
+}
+
+variable "db_address" {
+  description = "Address of the database."
+  type        = string
+}
+
+variable "db_user" {
+  description = "User of the database."
+  type        = string
+}
+
+variable "db_password" {
+  description = "Password of the database."
+  type        = string
 }

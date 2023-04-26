@@ -29,7 +29,7 @@ module "asg" {
   source = "./modules/asg"
 
   vpc_id            = module.vpc.vpc_id
-  public_subnets_id = [ module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1] ]
+  public_subnets_id = [module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1]]
 
   server_port = var.server_port
   db_address  = module.db.address
@@ -57,7 +57,7 @@ module "lb" {
 module "db" {
   source = "./modules/db"
 
-  subnet_ids = [ module.vpc.private_subnets_id[2], module.vpc.private_subnets_id[3] ]
+  subnet_ids = [module.vpc.private_subnets_id[2], module.vpc.private_subnets_id[3]]
   vpc_id     = module.vpc.vpc_id
 
   port = 3306
@@ -69,7 +69,7 @@ module "db" {
 module "jumpbox" {
   source = "./modules/jumpbox"
 
-  vpc_id = module.vpc.vpc_id
+  vpc_id          = module.vpc.vpc_id
   jumpbox_subnet  = module.vpc.jumpbox_subnet_id
-  private_subnets = [ module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1] ]
+  private_subnets = [module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1]]
 }

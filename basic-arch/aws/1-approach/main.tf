@@ -62,6 +62,6 @@ resource "aws_instance" "ec2" {
   user_data_replace_on_change = true
 
   tags = {
-    name  = "MyFirstEC2"
+    name = "MyFirstEC2"
   }
 }
