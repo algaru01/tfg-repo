@@ -1,4 +1,4 @@
 output "public_ip" {
-  value       = aws_instance.ec2.public_ip
-  description = "The public IP address of the EC2 instance."
+  value       = module.ec2.public_ips
+  description = "List of IPs for the EC2 in the public subnets."
 }
