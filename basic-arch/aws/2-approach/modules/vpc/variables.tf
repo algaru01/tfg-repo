@@ -6,4 +6,5 @@ variable "cidr_block" {
 variable "public_subnets" {
   description = "List of the CIDR blocks for each public subnet to be created in such VPC."
   type        = list(string)
+  default     = null
 }
