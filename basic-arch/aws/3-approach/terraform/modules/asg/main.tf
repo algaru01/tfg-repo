@@ -8,7 +8,7 @@ resource "aws_launch_template" "this" {
   instance_type          = data.aws_ec2_instance_types.free_instance.instance_types[0]
   vpc_security_group_ids = [aws_security_group.allow_http.id]
 
-  user_data = filebase64("${path.cwd}/init-script.sh")
+  user_data = filebase64("${path.cwd}/../scripts/init-script.sh")
 
   tags = {
     Name = "myASGLaunchTemplate"
@@ -17,7 +17,7 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                = "myAutoscalingGroup"
-  vpc_zone_identifier = var.public_subnets_id
+  vpc_zone_identifier = var.public_subnets
   target_group_arns   = var.target_group_arns
 
   launch_template {

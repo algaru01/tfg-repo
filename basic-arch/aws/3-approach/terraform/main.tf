@@ -27,7 +27,7 @@ module "asg" {
   source = "./modules/asg"
 
   vpc_id            = module.vpc.vpc_id
-  public_subnets_id = module.vpc.public_subnets_id
+  public_subnets = module.vpc.public_subnets_id
   server_port       = var.server_port
 
   target_group_arns = [module.lb.main_target_group_arn]
@@ -40,7 +40,7 @@ module "lb" {
   source = "./modules/lb"
 
   vpc_id            = module.vpc.vpc_id
-  public_subnets_id = module.vpc.public_subnets_id
+  public_subnets = module.vpc.public_subnets_id
   server_port       = var.server_port
 }
 

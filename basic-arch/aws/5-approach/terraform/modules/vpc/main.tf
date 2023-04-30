@@ -7,11 +7,11 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_subnet" "public" {
-  count = length(var.public_subnets)
+  count = var.public_subnets != null ? length(var.public_subnets) : 0
 
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.public_subnets[count.index]
-  availability_zone       = var.availability_zone[count.index]
+  availability_zone       = var.public_subnets_availability_zone[count.index]
   map_public_ip_on_launch = true
 
   tags = {
@@ -20,11 +20,11 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  count = length(var.private_subnets)
+  count = var.private_subnets != null ? length(var.private_subnets) : 0
 
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.private_subnets[count.index]
-  availability_zone       = var.availability_zone[count.index]
+  availability_zone       = var.private_subnets_availability_zone[count.index]
   map_public_ip_on_launch = false
 
   tags = {
@@ -32,12 +32,16 @@ resource "aws_subnet" "private" {
   }
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_subnet" "jumpbox" {
   count = var.jumpbox_subnet != null ? 1 : 0
 
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.jumpbox_subnet
-  availability_zone       = var.availability_zone[count.index]
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
 
   tags = {
@@ -63,9 +67,9 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = length(var.public_subnets)
+  count = var.public_subnets != null ? length(var.public_subnets) : 0
 
-  subnet_id      = element(aws_subnet.public[*].id, count.index)
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 

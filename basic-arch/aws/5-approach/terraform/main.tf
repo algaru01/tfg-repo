@@ -22,7 +22,9 @@ module "vpc" {
   public_subnets    = ["10.0.0.0/24", "10.0.1.0/24"]
   private_subnets   = ["10.0.100.0/24", "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
   jumpbox_subnet    = "10.0.200.0/28"
-  availability_zone = ["eu-west-1a", "eu-west-1b", "eu-west-1a", "eu-west-1b"]
+
+  public_subnets_availability_zone  = ["eu-west-1a", "eu-west-1b"]
+  private_subnets_availability_zone = ["eu-west-1a", "eu-west-1b", "eu-west-1a", "eu-west-1b"]
 }
 
 module "asg" {

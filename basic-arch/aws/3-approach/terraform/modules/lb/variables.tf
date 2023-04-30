@@ -3,8 +3,8 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "public_subnets_id" {
-  description = "List of public subnets ids where this load balancer works."
+variable "public_subnets" {
+  description = "List of public subnets where this load balancer works."
   type        = list(string)
 }
 

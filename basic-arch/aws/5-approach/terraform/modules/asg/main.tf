@@ -15,7 +15,7 @@ resource "aws_key_pair" "this" {
 resource "aws_launch_template" "this" {
   image_id               = "ami-05ba42ed0dd051449" #1.0.0
   instance_type          = data.aws_ec2_instance_types.free_instance.instance_types[0]
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  vpc_security_group_ids = [aws_security_group.allow_http_ssh_icmp.id]
 
   user_data = base64encode(templatefile("${path.cwd}/launch-server.sh", {
     db_address  = var.db_address,
@@ -45,7 +45,7 @@ resource "aws_autoscaling_group" "this" {
   max_size = var.max_size
 }
 
-resource "aws_security_group" "allow_http" {
+resource "aws_security_group" "allow_http_ssh_icmp" {
   vpc_id = var.vpc_id
 
   ingress {
@@ -81,22 +81,6 @@ resource "aws_security_group" "allow_http" {
     Name = "myASGSecurityGroup"
   }
 }
-
-/* data "aws_ami" "ubuntu" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-}*/
 
 data "aws_ec2_instance_types" "free_instance" {
 

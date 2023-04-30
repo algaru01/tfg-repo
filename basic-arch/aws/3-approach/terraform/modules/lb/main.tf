@@ -11,7 +11,7 @@ resource "aws_lb" "this" {
   name = "my-lb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http.id]
-  subnets            = var.public_subnets_id
+  subnets            = var.public_subnets
 }
 
 resource "aws_security_group" "allow_http" {

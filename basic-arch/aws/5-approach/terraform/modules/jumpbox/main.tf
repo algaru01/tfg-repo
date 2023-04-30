@@ -1,4 +1,4 @@
-resource "aws_security_group" "this" {
+resource "aws_security_group" "allow_ssh" {
   description = "Allow SSH to the jumpbox"
   vpc_id      = var.vpc_id
 
@@ -34,7 +34,7 @@ resource "aws_instance" "jumpbox" {
   instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
 
   key_name                    = aws_key_pair.this.key_name
-  vpc_security_group_ids      = [aws_security_group.this.id]
+  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
   subnet_id                   = var.jumpbox_subnet
   associate_public_ip_address = true
 

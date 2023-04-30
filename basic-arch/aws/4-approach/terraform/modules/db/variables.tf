@@ -3,8 +3,8 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "List of subnet ids where this database can be provisioned in."
+variable "db_subnets" {
+  description = "List of subnet where this database can be provisioned in."
   type        = list(string)
 }
 
