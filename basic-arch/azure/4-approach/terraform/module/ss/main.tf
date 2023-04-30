@@ -41,9 +41,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
       subnet_id                              = var.ss_subnet
       load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
       primary                                = true
-      public_ip_address {
-        name = "temporal-ip-address"
-      }
+
     }
   }
 

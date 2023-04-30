@@ -8,7 +8,7 @@ data "azurerm_image" "image" {
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
-  name                = "myVMScaleSet"
+  name                = "myLinuxVMScaleSet"
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Standard_B1s"
@@ -32,7 +32,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     primary = true
     ip_configuration {
       name                                   = "IPConfiguration"
-      ss_subnet                              = var.ss_subnet
+      subnet_id                              = var.ss_subnet
       load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
       primary                                = true
       public_ip_address {

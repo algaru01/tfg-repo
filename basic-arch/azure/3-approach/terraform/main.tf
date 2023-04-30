@@ -33,7 +33,7 @@ module "lb" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 
-  server_port = 8080
+  server_port = var.server_port
 }
 
 module "ss" {

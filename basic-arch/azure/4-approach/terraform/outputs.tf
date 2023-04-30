@@ -1,4 +1,4 @@
-output "vm_public_ip" {
+output "lb_public_ip" {
   value       = module.lb.ss_public_ip
   description = "The public IP address of the VM instance."
 }
@@ -9,8 +9,4 @@ output "bastion_public_ip_fqdn" {
 
 output "bastion_public_ip" {
   value = module.bastion.bastion_public_ip
-}
-
-output "fqdn" {
-  value = module.db.db_address
 }

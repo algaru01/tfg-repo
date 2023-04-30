@@ -7,13 +7,14 @@ resource "azurerm_virtual_network" "this" {
 
 resource "azurerm_subnet" "public" {
   count                = length(var.public_subnets)
+
   name                 = "public-subnets-${count.index}"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = [var.public_subnets[count.index]]
 }
 
-resource "azurerm_network_security_group" "this" {
+resource "azurerm_network_security_group" "allow_http_ssh" {
   name                = "mySecurityGroup"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -47,6 +48,7 @@ resource "azurerm_network_security_group" "this" {
 
 resource "azurerm_subnet_network_security_group_association" "this" {
   count                     = length(var.public_subnets)
+
   subnet_id                 = element(azurerm_subnet.public[*].id, count.index)
-  network_security_group_id = azurerm_network_security_group.this.id
+  network_security_group_id = azurerm_network_security_group.allow_http_ssh.id
 }

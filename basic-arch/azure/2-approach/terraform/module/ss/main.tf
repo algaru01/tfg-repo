@@ -1,5 +1,5 @@
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
-  name                = "myVMScaleSet"
+  name                = "myLinuxVMScaleSet"
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Standard_B1ls"
@@ -8,7 +8,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
 
   admin_ssh_key {
     username   = "ubuntu"
-    public_key = file("${path.cwd}/../../ss_key.pub")
+    public_key = file("${path.cwd}/../../ssh-keys/ss_key.pub")
   }
 
   os_disk {
@@ -28,7 +28,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     primary = true
     ip_configuration {
       name                                   = "IPConfiguration"
-      subnet_id                              = var.subnet_id
+      subnet_id                              = var.ss_subnet
       load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
       primary                                = true
       public_ip_address {
