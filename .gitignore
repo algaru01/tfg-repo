@@ -226,5 +226,3 @@ terraform.rc
 *_LOCAL_*.txt
 *_REMOTE_*.txt
 
-#GCloud Credentials
-basic-arch/gcp/credentials/
