@@ -37,7 +37,7 @@ module "mig" {
 
   db_address     = module.db.db_address
   db_user        = var.db_user
-  db_password = var.db_password 
+  db_password    = var.db_password 
 }
 
 module "lb" {

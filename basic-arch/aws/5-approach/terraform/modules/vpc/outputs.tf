@@ -13,7 +13,7 @@ output "private_subnets_id" {
   value       = aws_subnet.private[*].id
 }
 
-output "jumpbox_subnet_id" {
+/* output "jumpbox_subnet_id" {
   description = "ID of the jumpbox subnet"
   value       = aws_subnet.jumpbox[0].id
-}
+} */

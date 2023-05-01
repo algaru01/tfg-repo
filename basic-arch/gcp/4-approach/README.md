@@ -6,7 +6,7 @@ En Google, ciertos servicios son desplegados en una VPC propia gestionada por Go
 Para ello, primeramente se configurará en nuestra VPC un bloque CIDR reservado que no podremos asignar a ninguna instancia de nuestra red, sino que será utilizado para acceder a los servicios de la VPC de los productores de servicios. Este se hace con el recurso 'google_compute_global_address' en modo VPC_PEERING.
 Y finalmente se crea la conexión privada con 'google_service_networking_connection' que hace uso de la API "servicenetworking.googleapis.com", por lo que es posible que haya que activar esta para tú proyecto.
 
-Una vez creada la instancia de la base de datos y la conexión a esta, será posible crear las bases de datos que se quieran con 'google_sql_database' y los usuarios con 'google_sql_database'
+Una vez creada la instancia de la base de datos y la conexión a esta, será posible crear las bases de datos que se quieran con 'google_sql_database' y los usuarios con 'google_sql_user'
 
 
 Además, se ha creado una imagen con Packer con un entorno preparado para desplegar una aplicación que haga uso de la base de datos (por defecto tendrá 2 estudiatnes) con los siguientes endpoints:

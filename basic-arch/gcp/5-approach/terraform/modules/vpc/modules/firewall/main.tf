@@ -8,11 +8,10 @@ resource "google_compute_firewall" "allow_server_port" {
     ports    = [var.server_port]
   }
   source_ranges = ["0.0.0.0/0"]
-  destination_ranges = [ var.lb_address ]
 }
 
-resource "google_compute_firewall" "allow_ssh_to_jumpbox" {
-  name    = "allow-ssh-to-jumpbox"
+resource "google_compute_firewall" "allow_ssh" {
+  name    = "allow-ssh"
   network = var.network
 
   direction = "INGRESS"
@@ -22,7 +21,6 @@ resource "google_compute_firewall" "allow_ssh_to_jumpbox" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  //destination_ranges = [ var.jumpbox_address ]
 }
 
 resource "google_compute_firewall" "allow_icmp" {

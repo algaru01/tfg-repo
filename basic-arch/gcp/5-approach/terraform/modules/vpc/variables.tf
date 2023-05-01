@@ -3,17 +3,7 @@ variable "server_port" {
   type        = number
 }
 
-variable "public_subnets" {
-  description = "List of CIDRs for the public subnets."
+variable "subnets" {
+  description = "List of CIDRs for the subnets."
   type        = list(string)
-}
-
-variable "lb_address" {
-  description = "Address of the load balancer"
-  type = string
-}
-
-variable "jumpbox_address" {
-  description = "Address of the jumpbox"
-  type = string
 }

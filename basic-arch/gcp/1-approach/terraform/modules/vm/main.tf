@@ -1,4 +1,3 @@
-
 resource "google_compute_instance" "this" {
   name         = "my-instance"
   machine_type = "e2-micro"
@@ -18,6 +17,6 @@ resource "google_compute_instance" "this" {
   metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
 
   metadata = {
-    ssh-keys = "ubuntu:${file("${path.cwd}/test_asg.pub")}"
+    ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
   }
 }

@@ -1,5 +1,5 @@
 resource "google_compute_forwarding_rule" "this" {
-  name                  = "website-forwarding-rule"
+  name                  = "my-lb-forwarding-rule"
 
   backend_service = google_compute_region_backend_service.this.self_link
 
@@ -9,7 +9,7 @@ resource "google_compute_forwarding_rule" "this" {
 }
 
 resource "google_compute_region_health_check" "this" {
-  name                = "autohealing-health-check"
+  name                = "my-lb-health-check"
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
@@ -36,10 +36,7 @@ resource "google_compute_region_backend_service" "this" {
   }
 }
 
-
-
-
 resource "google_compute_address" "this" {
-  name         = "my-lb-ip"
-  address_type = "EXTERNAL" # O "EXTERNAL" dependiendo del tipo de dirección que quieras usar
+  name         = "my-lb-public-ip"
+  address_type = "EXTERNAL"
 }

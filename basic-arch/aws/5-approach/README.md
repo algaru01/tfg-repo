@@ -1,5 +1,15 @@
 # 5 Acercamiento
-Hasta ahora, las instancias de EC2 no se encontraban en una red privada, y si bien limitabamos el tráfico entrante en estas para permitir únicamente la entrada al puerto del servidor y a SSH, lo mejor sería eliminar cualquier posibilidad de que estas máquinas puedan ser accedidas desde Internet.
+En este último acercamiento, moveremos el Grupo de Autoescalado a unas *subnets* privadas y limitaremos su conexión SSH a través de un nuevo nodo *jumpbox* que se encontrará en una *subnet* pública. Así, cualquiera que quiera acceder a las EC2 del ASG desde internet, deberá primeramente pasar el filtro que se establezca dentro del nodo jumpbox. El comando SSH para acceder será: 'ssh -J ubuntu@<jumpbox_ip> ubuntu@<vm_private_ip>', habiendo añadido previamente mediante 'ssh-add <private_key>' las claves de ambas máquinas.
 
-Para ello, se han añadido más redes privadas y se han cambiado las EC2 a estas, por lo que ya no tendrán una IP pública y no podrán ser accedidas directamente a través de Internet. Conforme esto, se ha añadido un nodo jumpbox a través del cual nos será posible conectar mediante SSH a aquellas instancias de EC2. De este modo, se ha añadido una red única para este host y se ha incluido un nuevo módulo que crea dicho nodo. Este consistirá en otra EC2 dentro de una red pública de la VPC, por lo tanto podrá conectarso con las máquinas del ASG, y con unas reglas de seguirdad que únicamente le permitan ser accedido desde internet mediante SSH.
-Así, cualquiera que quiera acceder a las EC2 del ASG desde internet, deberá primeramente pasar el filtro que se establezca dentro del nodo jumpbox. El comando SSH para acceder será: 'ssh -J ubuntu@<jumpbox_ip> ubuntu@<vm_private_ip>', habiendo añadido previamente mediante 'ssh-add <private_key>' las claves de ambas máquinas.
+De este modo creamos un nuevo módulo llamado `Jumpbox`.
+##### Jumpbox
+Este módulo consta de un simple `aws_instance` similar al que creamos en el primer acercamiento pero con un clave SSH  y un grupo de seguridad que únicamene permita el tráfico SSH.
+
+###### Inputs
+* `vpc_id`. ID de la VPC donde se desplegará el nodo *jumpbox*
+* `jumpbox_subnet`. Subnet donde se desplegará el nodo *jumpbox*.
+
+###### Outputs
+* `jumpbox_address`. Dirección IP pública del nodo *jumpbox*.
+##### Cambios en otros módulos
+Ahora el el Grupo de Autoescalado del módulo `ASG` se encuentra en *subnets* privadas.

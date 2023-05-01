@@ -24,8 +24,3 @@ variable "private_subnets_availability_zone" {
   description = "List of the availability zone of each private subnet."
   type        = list(string)
 }
-
-variable "jumpbox_subnet" {
-  description = "Subnet to deploy the jumpbox."
-  type        = string
-}

@@ -1,6 +1,6 @@
 output "public_subnets" {
   description = "List of public subnets."
-  value       = google_compute_subnetwork.public[*].self_link
+  value       = google_compute_subnetwork.this[*].self_link
 }
 
 output "vpc" {

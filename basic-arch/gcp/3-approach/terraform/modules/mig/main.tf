@@ -3,7 +3,7 @@ data "google_service_account" "this" {
 }
 
 resource "google_compute_instance_template" "this" {
-  name           = "my-instance-template"
+  name           = "my-mig-instance-template"
   machine_type   = "e2-micro"
 
   disk {
@@ -30,7 +30,7 @@ resource "google_compute_instance_template" "this" {
 }
 
 resource "google_compute_instance_group_manager" "this" {
-  name = "my-igm"
+  name = "my-mig"
 
   version {
     instance_template = google_compute_instance_template.this.id
@@ -46,7 +46,7 @@ resource "google_compute_instance_group_manager" "this" {
 }
 
 resource "google_compute_autoscaler" "default" {
-  name   = "my-autoscaler"
+  name   = "my-mig-autoscaler"
   target = google_compute_instance_group_manager.this.id
 
   autoscaling_policy {
@@ -57,7 +57,7 @@ resource "google_compute_autoscaler" "default" {
 }
 
 resource "google_compute_health_check" "this" {
-  name                = "autohealing-health-check"
+  name                = "my-mig-health-check"
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
