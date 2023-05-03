@@ -1,6 +1,6 @@
 variable "vpc" {
-  description = "Private network where this db is deployed."
-  type = string
+  description = "Private network where you will use."
+  type        = string
 }
 
 variable "db_user" {
@@ -10,6 +10,6 @@ variable "db_user" {
 
 variable "db_password" {
   description = "Password for the user of the database."
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }

@@ -5,5 +5,5 @@ output "public_subnets" {
 
 output "vpc" {
   description = "ID of the VPC created."
-  value = google_compute_network.this.id
+  value       = google_compute_network.this.id
 }

@@ -22,6 +22,11 @@ data "aws_ec2_instance_types" "free_instance" {
   }
 }
 
+resource "aws_key_pair" "this" {
+  key_name   = "test_asg"
+  public_key = file("${path.cwd}/../../ssh-keys/test_asg.pub")
+}
+
 resource "aws_security_group" "allow_http" {
   name   = "ec2_sg"
   vpc_id = var.vpc
@@ -31,6 +36,27 @@ resource "aws_security_group" "allow_http" {
     to_port     = var.server_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = "22"
+    to_port     = "22"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["10.0.0.0/16"]
   }
 }
 
@@ -42,6 +68,8 @@ resource "aws_instance" "ec2" {
 
   subnet_id              = var.subnet
   vpc_security_group_ids = [aws_security_group.allow_http.id]
+
+  key_name = aws_key_pair.this.key_name
 
   user_data = <<-EOF
             #!/bin/bash

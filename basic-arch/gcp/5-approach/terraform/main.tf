@@ -43,8 +43,8 @@ module "mig" {
 module "lb" {
   source = "./modules/lb"
 
-  server_port    = var.server_port
-  instance_group = module.mig.instance_group
+  check_port             = var.server_port
+  instance_group_backend = module.mig.instance_group
 
   depends_on = [
     module.mig
@@ -54,8 +54,8 @@ module "lb" {
 module "db" {
   source = "./modules/db"
 
-  vpc = module.vpc.vpc
-  db_user = var.db_user
+  vpc         = module.vpc.vpc
+  db_user     = var.db_user
   db_password = var.db_password
 }
 

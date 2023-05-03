@@ -13,7 +13,7 @@ resource "azurerm_bastion_host" "this" {
   resource_group_name = var.resource_group_name
 
   sku               = "Standard"
-  tunneling_enabled = true    //Quitar?
+  tunneling_enabled = true //Quitar?
 
   ip_configuration {
     name                 = "bastionIPConfig"

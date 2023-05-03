@@ -14,7 +14,7 @@ resource "google_compute_instance" "this" {
     }
   }
 
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
 
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"

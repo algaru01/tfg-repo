@@ -18,9 +18,9 @@ data "aws_availability_zones" "available" {
 module "vpc" {
   source = "./modules/vpc"
 
-  cidr_block        = "10.0.0.0/16"
-  public_subnets    = ["10.0.0.0/24", "10.0.1.0/24"]
-  private_subnets   = ["10.0.100.0/24", "10.0.101.0/24"]
+  cidr_block      = "10.0.0.0/16"
+  public_subnets  = ["10.0.0.0/24", "10.0.1.0/24"]
+  private_subnets = ["10.0.100.0/24", "10.0.101.0/24"]
 
   public_subnets_availability_zone  = ["eu-west-1a", "eu-west-1b"]
   private_subnets_availability_zone = ["eu-west-1a", "eu-west-1b"]
@@ -29,7 +29,7 @@ module "vpc" {
 module "asg" {
   source = "./modules/asg"
 
-  vpc_id            = module.vpc.vpc_id
+  vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets_id
 
   server_port = var.server_port

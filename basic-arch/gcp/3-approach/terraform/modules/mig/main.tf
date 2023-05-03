@@ -1,10 +1,10 @@
 data "google_service_account" "this" {
-  account_id   = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
+  account_id = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
 }
 
 resource "google_compute_instance_template" "this" {
-  name           = "my-mig-instance-template"
-  machine_type   = "e2-micro"
+  name         = "my-mig-instance-template"
+  machine_type = "e2-micro"
 
   disk {
     source_image = "ubuntu-os-cloud/ubuntu-1804-lts"
@@ -16,7 +16,7 @@ resource "google_compute_instance_template" "this" {
     }
   }
 
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
 
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
@@ -61,7 +61,7 @@ resource "google_compute_health_check" "this" {
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10 # 50 seconds
+  unhealthy_threshold = 10
 
   http_health_check {
     request_path = "/"

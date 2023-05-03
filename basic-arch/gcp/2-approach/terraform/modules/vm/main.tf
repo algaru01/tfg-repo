@@ -1,7 +1,7 @@
 
 resource "google_compute_instance" "this" {
   count = var.number_vms
-  
+
   name         = "my-instance-${count.index}"
   machine_type = "e2-micro"
 
@@ -19,7 +19,7 @@ resource "google_compute_instance" "this" {
 
   allow_stopping_for_update = true
 
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
 
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"

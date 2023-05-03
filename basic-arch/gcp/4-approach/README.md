@@ -1,20 +1,31 @@
 # 4 Acercamiento
 
-Ahora se va a añadir una instancia de base de datos Postgresql proporcionada por el servicio Cloud SQL. Para ello, se hace uso del recurso 'google_sql_database_instance' que gestiona el tipo de base de datos y su versión (en este caso Postgres 13), el tipo de máquina y configura la conexión red. En este caso se requiere que esta base de datos únicamente sea accedida desde las instancias de máquinas virtuales lanzandas, por lo tanto habrá que configurarla para que únicamente tenga una IP privada.
+Ahora se va a añadir una instancia de base de datos Postgresql proporcionada por el servicio Cloud SQL con una base de datos `student`. En Google, ciertos servicios son desplegados en una VPC propia gestionada por Google y en primera instancia ajena a nuestra propia VPC, y uno de estos servicios es el de Cloud SQL. Por lo tanto, si queremos que la instancia de base de datos tenga únicamente conexión desde las máquinas de VPC necesitaremos configurar un *network peering* o intercambio de tráfico entre ambas VPCs. Para ello, se deberá configurar en nuestra VPC un bloque CIDR reservado que no podremos asignar a ninguna instancia de nuestra red, sino que será utilizado para acceder a los servicios de la VPC de los productores de servicios.
 
-En Google, ciertos servicios son desplegados en una VPC propia gestionada por Google y en primera instancia ajena a nuestra propia VPC, y uno de estos servicios es el de Cloud SQL. Por lo tanto, si queremos que la instancia de base de datos tenga únicamente conexión desde las máquinas de VPC necesitaremos configurar un network peering o intercambio de tráfico entre ambas VPCs.
-Para ello, primeramente se configurará en nuestra VPC un bloque CIDR reservado que no podremos asignar a ninguna instancia de nuestra red, sino que será utilizado para acceder a los servicios de la VPC de los productores de servicios. Este se hace con el recurso 'google_compute_global_address' en modo VPC_PEERING.
-Y finalmente se crea la conexión privada con 'google_service_networking_connection' que hace uso de la API "servicenetworking.googleapis.com", por lo que es posible que haya que activar esta para tú proyecto.
+Además, se desplegará un microservicio en el MIG que haga uso de las Base de Datos. Para ello, se ha hecho uso de Packer para crear una imagen con un entorno preparado que será usada en cada instancia del MIG.
 
-Una vez creada la instancia de la base de datos y la conexión a esta, será posible crear las bases de datos que se quieran con 'google_sql_database' y los usuarios con 'google_sql_user'
+## `DB`
+Contiene los siguientes recursos:
+* `google_sql_database_instance`. Crea la instancia sobre la que correrá la base de datos. Para ello se definen ciertos argumentos como:
+	* `database_version`. Donde se define el motor de base de datos usado y su versión.
+	* `settings`. Donde se definen ciertas características como el tipo de máquina con `tier`, la configuración IP con `ip_configuration`.
+	* `root_password`. Define la contraseña del usuario administrador `postgres`.
+	* `deletion_protection`. Establece un bloqueo de seguridad para que la base de datos no pueda ser destruida sin desactivar esta opción previamente.
+* `google_sql_database`. Crea la base de datos sobre la instancia construida.
+* `google_sql_user`. Crea un usuario con una contraseña dentro de la instancia construida.
+* `google_compute_global_address`. Crea el rango de direcciones reservado para la VPC del servicio de la Base de Datos.
+* `google_service_networking_connection`. Establece la conexión de nuestra VPC con la del servicio de Base de Datos. En este punto cabe recalcar que al usar el servicio `servicenetworking.googleapis.com`, es posible que tengas que activarlo para tú proyecto.
 
+### Inputs
+* `vpc`. VPC donde se usará esta Base de Datos.
+* `db_usar`. Usuario de la base de Datos.
+* `db_password`. Contraseña del usuario de la Base de Datos
 
-Además, se ha creado una imagen con Packer con un entorno preparado para desplegar una aplicación que haga uso de la base de datos (por defecto tendrá 2 estudiatnes) con los siguientes endpoints:
-    * GET /api/v1/student/ devolverá la lista de estudiantes en la base de datos.
-    * POST /api/v1/student/ permitirá añadir un estudiante a la base de datos.
-    * DELETE /api/v1/student/{studentID} borrará el estudiante con dicho ID.
-    * PUT /api/v1/student/{studentID} permitirá modificar datos de dicho estudiante.
-    * GET /api/v1/student/hello devolverá un hola mundo.
+### `Outputs`
+* `db_address`. Dirección IP privada de la base de datos.
+
+## Cambios en otros módulos
+Ahora el `google_compute_instance_manager` usa la imagen creada con Packer con el entorno preparado y un archivo de inicio que despliega de la aplicación.
 
 ## Recursos
 https://cloud.google.com/vpc/docs/private-services-access?hl=es-419#private-services-supported-services

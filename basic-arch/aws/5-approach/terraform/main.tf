@@ -14,9 +14,9 @@ provider "aws" {
 module "vpc" {
   source = "./modules/vpc"
 
-  cidr_block        = "10.0.0.0/16"
-  public_subnets    = ["10.0.0.0/24", "10.0.1.0/24", "10.0.200.0/28"]
-  private_subnets   = ["10.0.100.0/24", "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  cidr_block      = "10.0.0.0/16"
+  public_subnets  = ["10.0.0.0/24", "10.0.1.0/24", "10.0.200.0/28"]
+  private_subnets = ["10.0.100.0/24", "10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
   public_subnets_availability_zone  = ["eu-west-1a", "eu-west-1b", "eu-west-1b"]
   private_subnets_availability_zone = ["eu-west-1a", "eu-west-1b", "eu-west-1a", "eu-west-1b"]
@@ -66,6 +66,6 @@ module "db" {
 module "jumpbox" {
   source = "./modules/jumpbox"
 
-  vpc_id          = module.vpc.vpc_id
-  jumpbox_subnet  = module.vpc.public_subnets_id[2]
+  vpc_id         = module.vpc.vpc_id
+  jumpbox_subnet = module.vpc.public_subnets_id[2]
 }

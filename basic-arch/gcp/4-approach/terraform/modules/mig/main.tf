@@ -1,10 +1,10 @@
 data "google_service_account" "this" {
-  account_id   = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
+  account_id = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
 }
 
 resource "google_compute_instance_template" "this" {
-  name           = "my-instance-template"
-  machine_type   = "e2-micro"
+  name         = "my-instance-template"
+  machine_type = "e2-micro"
 
   disk {
     source_image = "packer-1682412407" #"ubuntu-os-cloud/ubuntu-1804-lts"
@@ -20,7 +20,7 @@ resource "google_compute_instance_template" "this" {
     db_address  = var.db_address,
     db_user     = var.db_user,
     db_password = var.db_password
-    })
+  })
 
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
@@ -69,7 +69,7 @@ resource "google_compute_health_check" "this" {
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10 # 50 seconds
+  unhealthy_threshold = 10
 
   http_health_check {
     request_path = "/"

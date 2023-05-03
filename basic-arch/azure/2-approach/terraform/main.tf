@@ -38,10 +38,10 @@ module "lb" {
 module "ss" {
   source = "./module/ss"
 
-  resource_group_name        = azurerm_resource_group.this.name
-  location                   = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
 
-  ss_subnet                  = module.vnet.public_subnets[0]
+  ss_subnet = module.vnet.public_subnets[0]
 
   lb_backend_address_pool_id = module.lb.backend_address_pool_id
   lb_rule                    = module.lb.lb_rule

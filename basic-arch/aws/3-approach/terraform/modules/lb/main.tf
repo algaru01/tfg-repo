@@ -8,14 +8,14 @@ locals {
 }
 
 resource "aws_lb" "this" {
-  name = "my-lb"
+  name               = "my-lb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http.id]
   subnets            = var.public_subnets
 }
 
 resource "aws_security_group" "allow_http" {
-  name = "my-lb-sg"
+  name   = "my-lb-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -67,7 +67,7 @@ resource "aws_lb_listener_rule" "forward_all" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name = "my-lb-tg"
+  name     = "my-lb-tg"
   port     = var.server_port
   protocol = local.http_protocol
   vpc_id   = var.vpc_id

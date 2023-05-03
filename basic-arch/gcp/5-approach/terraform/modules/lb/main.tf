@@ -13,12 +13,12 @@ resource "google_compute_region_health_check" "this" {
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10 # 50 seconds
+  unhealthy_threshold = 10
 
 
   http_health_check {
     request_path = "/"
-    port         = var.server_port
+    port         = var.check_port
   }
 }
 
@@ -32,7 +32,7 @@ resource "google_compute_region_backend_service" "this" {
   timeout_sec = 10
 
   backend {
-    group = var.instance_group
+    group = var.instance_group_backend
   }
 }
 
@@ -41,5 +41,5 @@ resource "google_compute_region_backend_service" "this" {
 
 resource "google_compute_address" "this" {
   name         = "my-lb-ip"
-  address_type = "EXTERNAL" # O "EXTERNAL" dependiendo del tipo de dirección que quieras usar
+  address_type = "EXTERNAL"
 }

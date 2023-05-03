@@ -1,7 +1,7 @@
 resource "azurerm_linux_virtual_machine" "this" {
   count = var.number_instances
 
-  name                = "myLinuxVM"
+  name                = "myLinuxVM-${count.index}"
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = "Standard_B1ls"
