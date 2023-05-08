@@ -24,6 +24,11 @@ resource "aws_launch_template" "this" {
   }))
   key_name = aws_key_pair.this.key_name
 
+  # Obliga a Terraform a crear una nueva Instancia antes de crear una nueva al actualizar este recurso
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name = "myASGLaunchTemplate"
   }
@@ -38,11 +43,12 @@ resource "aws_autoscaling_group" "this" {
     id = aws_launch_template.this.id
   }
 
-  health_check_type         = "ELB"
-  health_check_grace_period = 300
-
   min_size = var.min_size
   max_size = var.max_size
+  desired_capacity = var.desired_capacity
+
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
 }
 
 resource "aws_security_group" "allow_http_ssh_icmp" {

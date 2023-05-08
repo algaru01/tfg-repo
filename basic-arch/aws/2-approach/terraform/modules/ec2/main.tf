@@ -52,34 +52,40 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  //Allow internal traffic
   ingress {
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["10.0.0.0/16"] //Cambiar a variable
   }
+}
+
+resource "aws_network_interface" "this" {
+  subnet_id = var.subnet
+  security_groups = [ aws_security_group.allow_http.id ]
 }
 
 resource "aws_instance" "ec2" {
   count = var.number_instances != null ? var.number_instances : 0
 
-  ami           = data.aws_ami.ubuntu.id
   instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
-
-  subnet_id              = var.subnet
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
-
+  ami           = data.aws_ami.ubuntu.id
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.this.id
+  }
   key_name = aws_key_pair.this.key_name
 
+  
   user_data = <<-EOF
             #!/bin/bash
             echo "Hello, World" > index.html
             nohup busybox httpd -f -p ${var.server_port} &
             EOF
-
   user_data_replace_on_change = true
 
   tags = {
-    name = "MyFirstEC2"
+    name = "MyEC2"
   }
 }

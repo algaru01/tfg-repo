@@ -45,6 +45,7 @@ module "ss" {
 
   lb_backend_address_pool_id = module.lb.backend_address_pool_id
   lb_rule                    = module.lb.lb_rule
+  lb_probe                   = module.lb.lb_probe
 
   server_port = var.server_port
 }

@@ -4,12 +4,17 @@ resource "azurerm_linux_virtual_machine" "this" {
   name                = "myLinuxVM-${count.index}"
   resource_group_name = var.resource_group_name
   location            = var.location
+
   size                = "Standard_B1ls"
-  admin_username      = "ubuntu"
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
   network_interface_ids = [
     azurerm_network_interface.this[0].id,
   ]
-
   admin_ssh_key {
     username   = "ubuntu"
     public_key = file("${path.cwd}/../../ssh-keys/ss_key.pub")
@@ -20,14 +25,8 @@ resource "azurerm_linux_virtual_machine" "this" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  custom_data = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
+  admin_username = "ubuntu"
+  custom_data    = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
 }
 
 resource "azurerm_network_interface" "this" {
@@ -51,6 +50,7 @@ resource "azurerm_public_ip" "this" {
   name                = "myLinuxVM-PublicIP"
   resource_group_name = var.resource_group_name
   location            = var.location
+  
   allocation_method   = "Dynamic"
 
   lifecycle {

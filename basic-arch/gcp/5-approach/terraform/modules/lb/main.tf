@@ -5,7 +5,7 @@ resource "google_compute_forwarding_rule" "this" {
 
   ip_protocol = "TCP"
   ip_address  = google_compute_address.this.self_link
-  port_range  = var.server_port
+  port_range  = var.check_port
 }
 
 resource "google_compute_region_health_check" "this" {

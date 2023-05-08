@@ -4,23 +4,22 @@ data "google_service_account" "this" {
 
 resource "google_compute_instance_template" "this" {
   name         = "my-mig-instance-template"
-  machine_type = "e2-micro"
 
+  machine_type = "e2-micro"
   disk {
     source_image = "ubuntu-os-cloud/ubuntu-1804-lts"
   }
-
   network_interface {
     subnetwork = var.subnet
     access_config {
+      // Auto associate public IP
     }
   }
-
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
-
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
   }
+
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.

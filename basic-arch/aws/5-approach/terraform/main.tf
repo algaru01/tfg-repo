@@ -37,6 +37,7 @@ module "asg" {
 
   min_size = 2
   max_size = 5
+  desired_capacity = 2
 
   depends_on = [
     module.db

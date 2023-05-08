@@ -48,20 +48,20 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_instance" "ec2" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
 
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
+  ami           = data.aws_ami.ubuntu.id
 
   user_data = <<-EOF
             #!/bin/bash
             echo "Hello, World" > index.html
             nohup busybox httpd -f -p ${var.server_port} &
             EOF
-
   user_data_replace_on_change = true
 
+  vpc_security_group_ids = [aws_security_group.allow_http.id]
+
   tags = {
-    name = "MyFirstEC2"
+    name = "MyEC2"
   }
 }

@@ -1,32 +1,16 @@
-data "azurerm_resource_group" "image" {
-  name = "myPackerImages"
-}
-
-data "azurerm_image" "image" {
-  name                = "myPackerImageApplication"
-  resource_group_name = data.azurerm_resource_group.image.name
-}
-
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
   name                = "myLinuxVMScaleSet"
+
   resource_group_name = var.resource_group_name
   location            = var.location
-  sku                 = "Standard_B1s"
-  instances           = 2
-  admin_username      = "ubuntu"
 
-  admin_ssh_key {
-    username   = "ubuntu"
-    public_key = file("${path.cwd}/../../ssh-keys/ss_key.pub")
+  sku                 = "Standard_B1ls"
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
   }
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  source_image_id = data.azurerm_image.image.id
-
   network_interface {
     name    = "myNIC"
     primary = true
@@ -40,14 +24,36 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
       }
     }
   }
+  admin_ssh_key {
+    username   = "ubuntu"
+    public_key = file("${path.cwd}/../../ssh-keys/ss_key.pub")
+  }
 
-  custom_data = base64encode(templatefile("${path.cwd}/../scripts/launch-server.sh", {
-    db_address  = var.db_address
-    db_user     = var.db_user
-    db_password = var.db_password
-  }))
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  instances = 2
+
+  upgrade_mode = "Automatic"
+  health_probe_id = var.lb_probe
+  automatic_instance_repair {
+    enabled = true
+  }
+
+  admin_username = "ubuntu"
+  custom_data    = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
 
   depends_on = [
     var.lb_rule
   ]
 }
+/* 
+resource "azurerm_monitor_autoscale_setting" "this" {
+  name = "myVMScaleSetAutoscale"
+
+  resource_group_name = var.resource_group_name
+  location = var.location
+
+} */

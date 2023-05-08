@@ -29,6 +29,11 @@ variable "lb_rule" {
   type        = string
 }
 
+variable "lb_probe" {
+  description = "Id of the Load Balancer probe."
+  type        = string
+}
+
 variable "db_address" {
   description = "Address of the database."
   type        = string

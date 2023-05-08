@@ -10,3 +10,8 @@ output "ss_public_ip" {
 output "lb_rule" {
   value = azurerm_lb_rule.this.id
 }
+
+output "lb_probe" {
+  description = "Id of this Load Balancer probe."
+  value = azurerm_lb_probe.this.id
+}

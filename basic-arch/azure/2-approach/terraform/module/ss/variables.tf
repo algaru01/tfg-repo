@@ -28,3 +28,8 @@ variable "lb_rule" {
   description = "Id of a Load Balancer rule."
   type        = string
 }
+
+variable "lb_probe" {
+  description = "Id of the Load Balancer probe."
+  type        = string
+}
