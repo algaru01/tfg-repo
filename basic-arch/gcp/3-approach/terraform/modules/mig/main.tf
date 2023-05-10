@@ -37,6 +37,11 @@ resource "google_compute_instance_group_manager" "this" {
 
   base_instance_name = "autoscaler-sample"
 
+  named_port {
+    name = "server-port"
+    port = 8080
+  }
+
   auto_healing_policies {
     health_check      = google_compute_health_check.this.id
     initial_delay_sec = 300

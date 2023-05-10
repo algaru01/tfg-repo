@@ -23,14 +23,16 @@ module "vnet" {
   location            = azurerm_resource_group.this.location
 
   cidr_block     = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24"]
+  public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
-module "lb" {
-  source = "./module/lb"
+module "ag" {
+  source = "./module/ag"
 
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
+
+  ag_subnet = module.vnet.public_subnets[1]
 
   server_port = var.server_port
 }
@@ -43,9 +45,7 @@ module "ss" {
 
   ss_subnet = module.vnet.public_subnets[0]
 
-  lb_backend_address_pool_id = module.lb.backend_address_pool_id
-  lb_rule                    = module.lb.lb_rule
-  lb_probe                   = module.lb.lb_probe
+  ag_backend_address_pool = module.ag.ag_backend_address_pool.id
 
   server_port = var.server_port
 }

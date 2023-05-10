@@ -39,25 +39,20 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     ip_configuration {
       name                                   = "IPConfiguration"
       subnet_id                              = var.ss_subnet
-      load_balancer_backend_address_pool_ids = [var.lb_backend_address_pool_id]
+      application_gateway_backend_address_pool_ids = [var.ag_backend_address_pool_id]
       primary                                = true
-
     }
   }
 
-  upgrade_mode = "Automatic"
+/*   upgrade_mode = "Automatic"
   health_probe_id = var.lb_probe
   automatic_instance_repair {
     enabled = true
-  }
+  } */
 
   custom_data = base64encode(templatefile("${path.cwd}/../scripts/launch-server.sh", {
     db_address  = var.db_address
     db_user     = var.db_user
     db_password = var.db_password
   }))
-
-  depends_on = [
-    var.lb_rule
-  ]
 }

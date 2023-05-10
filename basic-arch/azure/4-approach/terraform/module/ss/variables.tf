@@ -19,18 +19,8 @@ variable "server_port" {
   default     = 8080
 }
 
-variable "lb_backend_address_pool_id" {
+variable "ag_backend_address_pool_id" {
   description = "Id of Load Balancer backend address pool."
-  type        = string
-}
-
-variable "lb_rule" {
-  description = "Id of a Load Balancer rule."
-  type        = string
-}
-
-variable "lb_probe" {
-  description = "Id of the Load Balancer probe."
   type        = string
 }
 

@@ -47,7 +47,8 @@ module "lb" {
   instance_group_backend = module.mig.instance_group
 
   depends_on = [
-    module.mig
+    module.mig,
+    module.vpc
   ]
 }
 

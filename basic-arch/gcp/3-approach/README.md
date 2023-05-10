@@ -1,5 +1,5 @@
 # 3 Acercamiento
-En este nuevo acercamineto se sustituirá la máquina virtual por un grupo de instancias con autoescalado (MIG). Además, se añadirá un balanceador de cargas de red TCP/UDP externo que distribuirá el tráfico entre las diferencias instancias que se vayan creando.
+En este nuevo acercamineto se sustituirá la máquina virtual por un grupo de instancias con autoescalado (MIG). Además, se añadirá un balanceador de cargas de HTTP externo que distribuirá el tráfico entre las diferencias instancias que se vayan creando.
 Como se menciona en la documentación de GCP, ambos recursos deben de tener diferentes verificadores de estado, siendo el segundo más restrictivo que el primero, pues este hará que se cree una nueva máquina mientras que el primero solo determinará si el tráfico se dirigirá alli o no (https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs?hl=es-419).
 
 Por lo tanto, se han desarrollado dos módulos que representan cada uno de estos servicios.
@@ -26,17 +26,22 @@ En este módulo se han creado los siguientes recursos:
 * `instance_group`. Grupo de instancias creadas. que será usado por el LB para distribuirle el tráfico.
 
 ## `LB`
-Define los siguientes recursos:
-* `google_compute_address`. Dirección IP que usará este Load Balancer.
+Configurará un Load Balancer externo regional de HTTP. Para ello consta de:
+* `google_compute_address`. Dirección IP que usará este Load Balancer en el *front*.
 * `google_compute_forwarding_rule`. Recibe el tráfico TCP entrante en una IP asignada y en un rango de puertos.
+* `google_compute_region_target_http_proxy`. Representa el proxy HTTP(S) de destino regional.
+* `google_compute_region_url_map`. Representa el mapa de URL.
 * `google_compute_region_backend_service`. Consiste en un grupo de isntancias a dónde distribuirá el tráfico el Load Balancer. Aquí se define el tipo de Load Balancer con `load_balancing_scheme` (en este caso externo) y el *backend* al que distribuirá el tráfico, así como el puerto y protocolo aque usará para comunicarse con él.
 * `google_compute_region_health_check`. Comprueba periódicamente el estado de un *backend*, de modo que el tráfico no se distribuya a aquellas que cumplan ciertas condiciones.
 ### Inputs
 * `check_port`. Puerto que se comprobará para comprobar el estado del *backend*.
-* `instance_group_backend`. 
+* `instance_group_backend`. Grupo de Instancias que actuará como *backend*.
 
 ### Outputs
 * `lb_address`. Dirección IP pública del Load Balancer.
+
+## Cambios en otros módulos
+Se ha añadido una *subnet* exclusiva para el proxy en el módulo `VPC`.
 
 ## Tips
 Es necesario añadir ciertos permisos al servicio para que pueda obtener y ejecutar el script de inicialización.

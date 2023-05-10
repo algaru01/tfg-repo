@@ -24,7 +24,11 @@ Contiene los siguientes recursos:
 * `db_password`. Contraseña maestra de la base de datos.
 
 ## Cambios en otros módulos
-* El módulo `VNET` ahora también crea una *subnet* exclusivamente para la base de datos. Esta requiere obligatoriamente de ciertos permisos específicos que se indican en la documentación. También se ha añadido un grupo de seguridad específico para dicha *subnet* que solo acepta conexiones en el puerto en el que funciona la base de datos.
-* En el módulo `SS`:
-	* Se ha sustituido la imagen anterior por una nueva generada mediante Packer. Esta nueva imágen coniene un entorno preparado para desplegar el código Java creado.
-	* Se ha cambiado el `user_data` para que ahora despliegue el código preparado.
+El módulo `VNET` ahora también crea una subnet exclusivamente para la base de datos. Esta requiere
+obligatoriamente de ciertos permisos específicos que se indican en la documentación. También se ha
+añadido un grupo de seguridad específico para dicha subnet que solo acepta conexiones en el puerto en
+el que funciona la base de datos.
+En el módulo `SS` :
+Se ha sustituido la imagen anterior por una nueva generada mediante Packer. Esta nueva imágen coniene
+un entorno preparado para desplegar el código Java creado.
+Se ha cambiado el user_data para que ahora despliegue el código preparado.

@@ -13,3 +13,8 @@ variable "server_port" {
   type        = number
   default     = 8080
 }
+
+variable "ag_subnet" {
+  description = "Subnet where this Application Gateway will be deployed."
+  type = string
+}

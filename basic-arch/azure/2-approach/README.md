@@ -2,28 +2,31 @@
 En este nuevo nivel mejoraremos la seguridad y la disponibilidad de nuestro servicio con el uso de un set de escalado y un balanceador de carga. Se ha desarrollado un módulo para cada uno de ellos.
 
 ## LB
-Contiene los siguientes recursos:
-* `azurerm_public_ip`. IP pública que será asociada a un balanceador de carga.
-* `azurerm_lb`. Crea la base del balanceador de carga. La parte principal de este recurso es el `frontend_ip_configuration`, pues configura el *Frontend* de nuestro Balanceador de Carga.
-* `azurerm_lb_backend_address_pool`. Crea un *Backend Pool*, que contiene los grupos de recursos que recibirán el tráfico del Balanceador de Carga, en este caso el Set de Escalado.
-* `azurerm_lb_probe`. Crea un *Health Probe*, que se utiliza para verificar el estado de los recursos del *Backend Pool*. En este caso comprobará el puerto donde corre nuestro servidor.
-* `azurerm_lb_rule`. Crea una regla para el Balanceador de Carga que indica como distribuir el tráfico entre los recursos del *Backend Pool*. En este caso reenviará todo el tráfico entrante al puerto del servidor al mismo puerto de una instancia del grupo de escalado.
+Crea un Application Gateway para distribuir el tráfico HTTP. Consta de un único recurso llamado `azurerm_application_gateway` que contiene los siguientes argumentos:
+* `sku`. Determina el nombre, *tier* y capacidad SKU del Application Gateway. Puede tener distintos valores como `Standard` o `Standard_v2` dependiendo de a versión de AG que se requiera.
+* `gateway_ip_configuration`. Configura la *subnet* a la que estará asociado dicho Application Gateway.
+* `frontend_port`. Configura el puerto en el que escuchará este servicio.
+* `frontend_ip_configuration`. Configura las direciones públicas y privadas que usará.
+* `backend_address_pool`. Define el conjunto de *backends* a los que distribuirá el tráfico. Su `id` será asociado luego a la interfaz de red de cada instancia que servirá como *backend*.
+* `backend_http_settings`. Crea el conjunto de configuraciones HTTP que serán usados para enrutar el tráfico.
+* `http_listener`. Crea el conjunto de *listeners* que escucharán en un puerto y dirección asignados mediante el `frontend_port` y el `frontend_ip_configuration`.
+* `request_routing_rule`. Crea el cnojunto de reglas que enlazan un `http_listener` con un grupo `backend_address_pool` y su `backend_http_settings`.
 ### Inputs
 * `resource_group_name`. Nombre del grupo de recursos donde se crearán los recursos.
 * `location`. Localización donde se van a desplegar cada recurso.
 * `server_port`. Puerto donde abrir el servidor web.
+* `ag_subnet`. *Subnet* donde se desplegará el Aplication Gateway.
 ### Outputs
-* `backend_address_pool_id`. ID del `azurerm_lb_backend_address_pool` creado y que será usado por el Set de Escalado.
-* `lb_public_ip`. IP pública del Balanceador de Carga.
-* `lb_rule`. ID del `azurerm_lb_rule` creado.
+* `ag_public_ip`. IP pública del Application Gateway.
+* `ag_backend_address_pool`. ID del `backend_address_pool` que será *linkeado* al *Scale Set*.
+
 ## SS
 Contiene los siguientes recursos:
-* `azurerm_linux_virtual_machine_scale_set`. Crea un Set de Escalado de máquinas virtuales de linux de la misma manera que lo hacia el `azurerm_linux_virtual_machine` con la excepción de que ahora existe un argumento `instance` para indicar el número de instancias que tendrá este Set de Escalado.
+* `azurerm_linux_virtual_machine_scale_set`. Crea un Set de Escalado de máquinas virtuales de Linux de la misma manera que lo hacia el `azurerm_linux_virtual_machine` con la excepción de que ahora existe un argumento `instance` para indicar el número de instancias que tendrá este Set de Escalado. Además se ha establecido la reparación automatica de instancias usando el `lb_probe` del Load Balancer y estableciendo el `upgrade_mode` en `Automatic`.
 * A modo de mejora, es posible añadir otro recurso que monitorice este recurso para escalarlo mejor.
 ### Inputs
 * `resource_group_name`. Nombre del grupo de recursos donde se crearán los recursos.
 * `location`. Localización donde se van a desplegar cada recurso.
 * `ss_subnet`. ID de la *subnet* donde se desplegará el SS.
 * `server_port`. Puerto donde abrir el servidor web.
-* `lb_backend_address_pool_id`.  ID del `azurerm_lb_backend_address_pool` del LB.
-* `lb_rule`. ID del `azurerm_lb_rule` del LB.
+* `ag_backend_address_pool`.  ID del `backend_address_pool` del Application Gateway.

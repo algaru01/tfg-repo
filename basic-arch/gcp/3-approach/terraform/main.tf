@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/google"
       version = "4.62.0"
     }
+/*     google-beta = {
+      source = "hashicorp/google-beta"
+      version = "4.63.1"
+    } */
   }
 }
 
@@ -41,4 +45,6 @@ module "lb" {
 
   check_port             = var.server_port
   instance_group_backend = module.mig.instance_group
+
+  depends_on = [ module.mig ]
 }
