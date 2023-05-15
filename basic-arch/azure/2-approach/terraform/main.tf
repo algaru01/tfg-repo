@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "myResourceGroup2"
+  name     = "myResourceGroup"
   location = "West Europe"
 }
 
@@ -23,27 +23,29 @@ module "vnet" {
   location            = azurerm_resource_group.this.location
 
   cidr_block     = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24"]
+  public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
-module "lb" {
-  source = "./module/lb"
+module "ag" {
+  source = "./module/ag"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
+  location            = azurerm_resource_group.this.location
 
-  server_port = 8080
+  ag_subnet = module.vnet.public_subnets[1]
+
+  server_port = var.server_port
 }
 
 module "ss" {
   source = "./module/ss"
 
   resource_group_name = azurerm_resource_group.this.name
-  location = azurerm_resource_group.this.location
-  subnet_id = module.vnet.subnets_id[0]
-  lb_backend_address_pool_id = module.lb.backend_address_pool_id
-  lb_rule = module.lb.lb_rule
+  location            = azurerm_resource_group.this.location
 
-  server_port = 8080
+  ss_subnet = module.vnet.public_subnets[0]
+
+  ag_backend_address_pool = module.ag.ag_backend_address_pool.id
+
+  server_port = var.server_port
 }

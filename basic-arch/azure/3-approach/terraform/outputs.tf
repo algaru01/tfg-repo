@@ -1,8 +1,4 @@
-output "vm_public_ip" {
-  value       = module.lb.lb_public_ip
+output "ag_public_ip" {
+  value       = module.ag.ag_public_ip
   description = "The public IP address of the Load Balancer."
-}
-
-output "fqdn" {
-  value = module.db.db_address
 }

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "4.62.0"
     }
   }
@@ -18,7 +18,7 @@ provider "google" {
 module "services" {
   source = "./modules/services"
 
-  services = [ "compute.googleapis.com" ]
+  services = ["compute.googleapis.com"]
 }
 
 module "vm" {

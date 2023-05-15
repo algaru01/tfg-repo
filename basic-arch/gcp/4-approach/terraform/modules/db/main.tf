@@ -1,13 +1,6 @@
-resource "google_sql_database" "this" {
-  name     = "my-db"
-  instance = google_sql_database_instance.this.name
-
-}
-
 resource "google_sql_database" "student" {
   name     = "student"
   instance = google_sql_database_instance.this.name
-
 }
 
 resource "google_compute_global_address" "this" {
@@ -25,16 +18,17 @@ resource "google_service_networking_connection" "this" {
 }
 
 resource "google_sql_database_instance" "this" {
-  name             = "my-db-instance"
+  name             = "my-db-instance2"
   database_version = "POSTGRES_13"
+  
 
   settings {
     tier = "db-f1-micro"
+    disk_size = 10
 
     ip_configuration {
-      ipv4_enabled = false
+      ipv4_enabled    = false
       private_network = var.vpc
-      //enable_private_path_for_google_cloud_services = true
     }
   }
 

@@ -10,5 +10,5 @@ output "db_subnet_id" {
 
 output "vnet_id" {
   description = "ID of the main VNet."
-  value = azurerm_virtual_network.this.id
+  value       = azurerm_virtual_network.this.id
 }

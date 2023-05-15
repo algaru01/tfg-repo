@@ -24,11 +24,9 @@ module "services" {
 module "vpc" {
   source = "./modules/vpc"
 
-  public_subnets = ["10.0.0.0/16", "10.1.0.0/24"]
+  subnets = ["10.0.0.0/16", "10.1.0.0/24"]
 
   server_port = var.server_port
-  lb_address = module.lb.lb_address
-  jumpbox_address = module.jumpbox.jumpbox_address
 }
 
 module "mig" {
@@ -37,7 +35,7 @@ module "mig" {
   server_port = var.server_port
   subnet      = module.vpc.public_subnets[0]
 
-  db_address  = "3" #module.db.db_address
+  db_address  = module.db.db_address
   db_user     = var.db_user
   db_password = var.db_password
 }
@@ -45,21 +43,22 @@ module "mig" {
 module "lb" {
   source = "./modules/lb"
 
-  server_port    = var.server_port
-  instance_group = module.mig.instance_group
+  check_port             = var.server_port
+  instance_group_backend = module.mig.instance_group
 
   depends_on = [
-    module.mig
+    module.mig,
+    module.vpc
   ]
 }
 
-/* module "db" {
+module "db" {
   source = "./modules/db"
 
-  vpc = module.vpc.vpc
-  db_user = var.db_user
+  vpc         = module.vpc.vpc
+  db_user     = var.db_user
   db_password = var.db_password
-} */
+}
 
 module "jumpbox" {
   source = "./modules/jumpbox"

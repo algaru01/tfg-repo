@@ -29,9 +29,11 @@ module "vnet" {
 module "vm" {
   source = "./module/vm"
 
+  number_instances = 2
+
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  subnet_id           = module.vnet.subnets_id[0]
+  subnet              = module.vnet.public_subnets[0]
 
   server_port = 8080
 }

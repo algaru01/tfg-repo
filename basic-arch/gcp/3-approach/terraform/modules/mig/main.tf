@@ -1,26 +1,25 @@
 data "google_service_account" "this" {
-  account_id   = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
+  account_id = var.service_email //"terraform@basic-arch-384210.iam.gserviceaccount.com"
 }
 
 resource "google_compute_instance_template" "this" {
-  name           = "my-instance-template"
-  machine_type   = "e2-micro"
+  name         = "my-mig-instance-template"
 
+  machine_type = "e2-micro"
   disk {
     source_image = "ubuntu-os-cloud/ubuntu-1804-lts"
   }
-
   network_interface {
     subnetwork = var.subnet
     access_config {
+      // Auto associate public IP
     }
   }
-
-  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", {server_port = var.server_port})
-
   metadata = {
     ssh-keys = "ubuntu:${file("${path.cwd}/../../ssh-keys/gcp_keys.pub")}"
   }
+
+  metadata_startup_script = templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port })
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -30,13 +29,18 @@ resource "google_compute_instance_template" "this" {
 }
 
 resource "google_compute_instance_group_manager" "this" {
-  name = "my-igm"
+  name = "my-mig"
 
   version {
     instance_template = google_compute_instance_template.this.id
   }
 
   base_instance_name = "autoscaler-sample"
+
+  named_port {
+    name = "server-port"
+    port = 8080
+  }
 
   auto_healing_policies {
     health_check      = google_compute_health_check.this.id
@@ -46,7 +50,7 @@ resource "google_compute_instance_group_manager" "this" {
 }
 
 resource "google_compute_autoscaler" "default" {
-  name   = "my-autoscaler"
+  name   = "my-mig-autoscaler"
   target = google_compute_instance_group_manager.this.id
 
   autoscaling_policy {
@@ -57,11 +61,11 @@ resource "google_compute_autoscaler" "default" {
 }
 
 resource "google_compute_health_check" "this" {
-  name                = "autohealing-health-check"
+  name                = "my-mig-health-check"
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10 # 50 seconds
+  unhealthy_threshold = 10
 
   http_health_check {
     request_path = "/"

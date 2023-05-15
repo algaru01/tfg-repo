@@ -4,21 +4,23 @@ variable "cidr_block" {
 }
 
 variable "public_subnets" {
-  description = "CIDR block for the public subnets in such VPC."
+  description = "List of the CIDR blocks for each public subnet to be created in such VPC."
   type        = list(string)
+  default     = null
 }
 
 variable "private_subnets" {
-  description = "CIDR block for the private subnets in such VPC."
+  description = "List of the CIDR blocks for each private subnet to be created in such VPC."
+  type        = list(string)
+  default     = null
+}
+
+variable "public_subnets_availability_zone" {
+  description = "List of the availability zone of each public subnet."
   type        = list(string)
 }
 
-variable "jumpbox_subnet" {
-  description = "Subnet to deploy the jumpbox."
-  type        = string
-}
-
-variable "availability_zone" {
-  description = "List of the availability zone of each subnet."
+variable "private_subnets_availability_zone" {
+  description = "List of the availability zone of each private subnet."
   type        = list(string)
 }

@@ -4,7 +4,7 @@ variable "server_port" {
 }
 
 variable "subnet" {
-  description = "Subnet where this VM will be working."
+  description = "Subnet where this MIG will be working."
   type        = string
 }
 

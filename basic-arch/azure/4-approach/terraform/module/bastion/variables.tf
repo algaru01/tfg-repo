@@ -8,7 +8,7 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_id" {
+variable "bastion_subnet" {
   description = "Id of the subnet where this bastion is deployed."
-  type = string
+  type        = string
 }

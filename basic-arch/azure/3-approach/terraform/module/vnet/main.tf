@@ -33,7 +33,7 @@ resource "azurerm_subnet" "db" {
   }
 }
 
-resource "azurerm_network_security_group" "public" {
+resource "azurerm_network_security_group" "allow_http_ssh" {
   count = length(var.public_subnets) > 0 ? 1 : 0
 
   name                = "public-subnets-sg"
@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "db" {
 resource "azurerm_subnet_network_security_group_association" "public" {
   count                     = length(var.public_subnets)
   subnet_id                 = element(azurerm_subnet.public[*].id, count.index)
-  network_security_group_id = azurerm_network_security_group.public[0].id
+  network_security_group_id = azurerm_network_security_group.allow_http_ssh[0].id
 }
 
 resource "azurerm_subnet_network_security_group_association" "db" {

@@ -1,12 +1,9 @@
-variable "server_port" {
-  description = "Port where the server will be launched."
+variable "check_port" {
+  description = "The TCP port number for the HTTP health check request."
   type        = number
 }
 
-variable "instance_group" {
-  type = string
+variable "instance_group_backend" {
+  description = "Instance group that will be backend of this LB."
+  type        = string
 }
-
-/* variable "vpc" {
-    type = string
-} */

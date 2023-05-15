@@ -1,12 +1,32 @@
 # 4 Acercamiento
-En este apartado se inlcuirá una base de datos al diseño. Para ello, se ha desarrollado un nuevo módulo llamado 'db' que creará un RDS de postgres con una base de datos 'student' y un usuario y contraseña que será pasado al crear el recurso.
-Por seguridad, se ha situado esta base de datos en una subnet privada de modo que quedará aislada del tráfico fuera de su VPC y solo podrá ser accedida por las instancias de EC2 que definimos antes en la subnet pública. Además, en su gurpo de seguridad se ha definido que únicamente aceptará tráfico en el puerto donde recibe peticiones la base de datos.
+En este apartado se incluirá una base de datos situada en una *subnet* privada que no podrá ser accedida por tráfico desde fuera de la VPC. Para ello se hará uso del servicio de RDS de AWS para crear una base de datos Postgresql con una tabla `student`. Además, se desplegará un microservicio dentro del Grupo de Autoescalado que haga uso de esta base de datos.
 
-Además, para este nuevo nivel se ha desarrollado un código que haga uso de la base de datos (por defecto tendrá 2 estudiatnes) con los siguientes endpoints:
-    * GET /api/v1/student/ devolverá la lista de estudiantes en la base de datos.
-    * POST /api/v1/student/ permitirá añadir un estudiante a la base de datos.
-    * DELETE /api/v1/student/{studentID} borrará el estudiante con dicho ID.
-    * PUT /api/v1/student/{studentID} permitirá modificar datos de dicho estudiante.
-    * GET /api/v1/student/hello devolverá un hola mundo.
+Para ello se ha desarrollado un nuevo módulo llamado `db`.
+## DB
+Este módulo consta de los siguientes recursos:
+* `aws_db_instance`. Crea la base de datos. Este require obligatoriamente:
+	* `identifier`. Identificador de la base de datos.
+	* `instance_class`. El tipo de instancia de la base de datos.
+	* `allocated_storage`. Indica el tamaño de la base de datos en GB. En este caso será 5 GB.
+	* `engine`. El motor que se usará. Por ejemplo: `mysql`, `mariadb` o `posrtgres`, como en este caso.
+	* `username`. Nombre del ususario maestro.
+	* `password`. Contraseña del usuario maestro.
+	Además de dichos argumentos, se han añadido algunos otros, como `port` para indicar el puerto donde escuchará la base de datos o `multi_az` para activar la opción de '*Multi Availability Zone*', que permite que Amazon aprovisione automáticamente y mantenga una o más instancias de base de datos secundarias en espera en una zona de disponibilidad diferente a la principal.
+* `aws_db_subnet_group`. A partir de una serie de *subnets*, crea un grupo de *subnets* donde se desplegará la base de datos. En AWS, es obligatorio desplegar las BBDD en varias *subnets* que estén en diferentes regiones.
+* `aws_security_group`.  Crea un grupo de seguridad que únicamente permita el tráfico entrante en el puerto que escuchará la base de datos.
+### Inputs
+* `vpc_id`. ID de la VPC donde se desplegará la base de datos.
+* `db_subnets`. Lista de *subnets* donde se desplegará la base de datos.
+* `port`. Puerto donde comunicarse con la base de datos.
+* `username`. Usuario maestro de la base de datos.
+* `password`. Contraseña maestra de la base de datos.
+### Outputs
+* `address`. Dirección de la base de datos que será usado por el grupo de autoescalado para conectarse a la misma.
 
-Para desplegar este código en las instancias de EC2 se ha hecho uso de una herramienta llamada 'Packer' de creación de plantillas de servidor. Esta herramienta de los mismos desarrolladores de Terraform, usa también HCL y te permite crear las imágenes que correrán en las máquinas virtuales, en este casi las AMI.
+## Cambios en otro módulos
+* `VPC`.
+	* Se ha incluido la creación de *subnets* privadas en el módulo `VPC` con el objetivo de situar ahí la base de datos. Estas tienen el argumento `map_public_ip_on_launch` en `false`.
+* `ASG`.
+	* Se ha sustituido la imagen anterior por una nueva generada mediante Packer. Esta nueva imágen coniene un entorno preparado para desplegar el código Java creado.
+	* Se ha cambiado el `user_data` para que ahora despliegue el código preparado.
+	* Se ha añadido la posibilidad de conectarse mediante SSH a sus instancias. Para ello se ha  incluido el recurso `aws_key_pair` para asociar una clave pública a cada instancia, y se ha modificado el grupo de seguridad para permitir también el tráfico por el puerto 22 (SSH).

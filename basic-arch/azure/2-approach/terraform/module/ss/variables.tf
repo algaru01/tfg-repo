@@ -8,8 +8,8 @@ variable "location" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Id of the subnet where this VM is deployed."
+variable "ss_subnet" {
+  description = "Id of the subnet where this Scale Set is deployed."
   type        = string
 }
 
@@ -19,12 +19,7 @@ variable "server_port" {
   default     = 8080
 }
 
-variable "lb_backend_address_pool_id" {
-  description = "Id of Load Balancer backend address pool."
-  type = string
-}
-
-variable "lb_rule" {
-  description = "Id of a Load Balancer rule."
+variable "ag_backend_address_pool" {
+  description = "Backend Address Pool of the Application Gateway that will be linked to this SS."
   type = string
 }

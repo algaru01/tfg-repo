@@ -44,11 +44,6 @@ resource "google_compute_instance_group_manager" "this" {
     health_check      = google_compute_health_check.this.id
     initial_delay_sec = 300
   }
-
-  depends_on = [
-    google_compute_instance_template.this
-  ]
-
 }
 
 resource "google_compute_autoscaler" "default" {
@@ -67,7 +62,7 @@ resource "google_compute_health_check" "this" {
   check_interval_sec  = 5
   timeout_sec         = 5
   healthy_threshold   = 2
-  unhealthy_threshold = 10 # 50 seconds
+  unhealthy_threshold = 10
 
   http_health_check {
     request_path = "/"

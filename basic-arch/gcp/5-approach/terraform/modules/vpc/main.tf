@@ -4,13 +4,21 @@ resource "google_compute_network" "this" {
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "public" {
-  count = var.public_subnets != null ? length(var.public_subnets) : 0
+resource "google_compute_subnetwork" "this" {
+  count = var.subnets != null ? length(var.subnets) : 0
 
-  name    = "my-public-subnet-${count.index}"
+  name    = "my-subnet-${count.index}"
   network = google_compute_network.this.self_link
 
-  ip_cidr_range = var.public_subnets[count.index]
+  ip_cidr_range = var.subnets[count.index]
+}
+
+resource "google_compute_subnetwork" "proxy" {
+  name          = "website-net-proxy"
+  ip_cidr_range = "10.129.0.0/26"
+  network       = google_compute_network.this.id
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  role          = "ACTIVE"
 }
 
 module "firewall" {
@@ -19,6 +27,4 @@ module "firewall" {
   network = google_compute_network.this.self_link
 
   server_port = var.server_port
-  lb_address = var.lb_address
-  jumpbox_address = var.jumpbox_address
 }

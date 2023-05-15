@@ -1,6 +1,6 @@
 
-resource "google_compute_instance" "bastion_host" {
-  name         = "my-bastion-host"
+resource "google_compute_instance" "jumpbox_host" {
+  name         = "my-jumpbox-host"
   machine_type = "e2-micro"
 
   boot_disk {
