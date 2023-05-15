@@ -55,12 +55,16 @@ module "lb" {
 module "ecs" {
   source = "./modules/ecs"
 
+  region = "eu-west-1"
+
   lb_sg = module.lb.alb_sg
   lb_target_group_arn = module.lb.main_target_group_arn
   vpc = module.vpc.vpc_id
-  public_subnets = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
+  subnets = [module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1]]
 
   repository_url = module.ecr.ecr_repository_url
+
+  server_port = 8080
 
   db_address  = module.db.address
   db_port     = 3306 //var

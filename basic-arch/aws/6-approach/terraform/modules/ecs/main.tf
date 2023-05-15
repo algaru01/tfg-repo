@@ -9,26 +9,10 @@ resource "aws_security_group" "ecs_tasks" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = 8080 //var.server_port
-    to_port         = 8080 //var.server_port
+    from_port       = var.server_port
+    to_port         = var.server_port
     cidr_blocks     = ["0.0.0.0/0"]
-    //security_groups = [var.lb_sg]
-  }
-
-/*     ingress {
-    protocol        = "tcp"
-    from_port       = 80 //var
-    to_port         = 80 //var
-    cidr_blocks     = ["0.0.0.0/0"]
-    //security_groups = [var.lb_sg]
-  } */
-
-  # Al ser ICMP from_port indica el tipo de mensaje y to_port el código. En este caso un echo-request para hacer ping.
-  ingress {
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [var.lb_sg]
   }
 
   egress {
@@ -78,16 +62,12 @@ resource "aws_ecs_task_definition" "miTaskDefinition" {
   container_definitions    = templatefile("${path.cwd}/../files/app.json.tpl", {
           aws_ecr_repository = var.repository_url
           tag                = "latest"
-          app_port           = 8080
-          region             = "eu-west-1"  //var.region
+          app_port           = var.server_port
+          region             = var.region
           prefix             = "${var.prefix}"
           envvars            = {"DATABASE_ADDRESS"=var.db_address, "DATABASE_PORT"=var.db_port, "DATABASE_USER"=var.db_user, "DATABASE_PASSWORD"=var.db_password}
-          port               = 8080  //var.server_port
+          port               = var.server_port
       })
-  tags = {
-    Environment = "staging"
-    Application = "${var.prefix}-app"
-  }
 }
 
 resource "aws_ecs_service" "miServicio" {
@@ -99,30 +79,20 @@ resource "aws_ecs_service" "miServicio" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = var.public_subnets
-    assign_public_ip = true
+    subnets          = var.subnets
+    //assign_public_ip = true
   }
 
   load_balancer {
     target_group_arn = var.lb_target_group_arn
     container_name   = "${var.prefix}-app"
-    container_port   = 8080 //var.server_port
+    container_port   = var.server_port
   }
 
   depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role]
-
-  tags = {
-    Environment = "staging"
-    Application = "${var.prefix}-app"
-  }
 }
 
 resource "aws_cloudwatch_log_group" "dummyapi" {
   name = "${var.prefix}-log-group"
-
-  tags = {
-    Environment = "staging"
-    Application = "${var.prefix}-app"
-  }
 }
 
