@@ -1,7 +1,7 @@
 # 5 Acercamiento
 En este nuevo nivel se susitituirán las máquinas virtuales por contenedores del servicio Azure Containers App. Este servicio te permite correr contenedores sin tener que preocuparte por gestionar el servidor donde correrán. Para ello se han desarrollado dos nuevos módulos que sistuituirán al previo `SS`.
 
-Para subir la imagen al contenedor:
+Antes de lanzar el módulo `ACA`, es necesario subir la imagen al contenedor de `ECR`:
     1. Primero deberemos hacer login con: az acr login --name <registry-name>.
     2. Etiquetamos la imagen con: docker tag <image_name> <registry-login-server>/<desired_image_name>:<tag>
     Como docker tag java-docker tfgcontainerregistry.azurecr.io/java-app:latest
@@ -43,9 +43,10 @@ Por último, `revision_mode` indica si puede haber más de una revisión a la ve
 
 ### Outputs
 * `fqdn`. FDQN del contenedor.
+* `ip_address`. Dirección IP del entorno del contenedor.
 
 ## Cambios en otros módulos
-Ahora el `backend_address_pool` del `AG` ahora usa como _backend_ el `fqdn` del contenedor.
+Ahora el `backend_address_pool` del `AG` ahora usa como _backend_ el `ip_address` del entorno del contenedor. De la misma forma hace uso del `fqdn` del contenedor para comprobar su estado.
 
 ## Referencias
 https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal?tabs=azure-cli

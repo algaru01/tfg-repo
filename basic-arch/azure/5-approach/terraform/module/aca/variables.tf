@@ -49,3 +49,8 @@ variable "db_password" {
   description = "Password of the database."
   type        = string
 }
+
+variable "ingress_target_port" {
+  description = "The target port on the container for the Ingress traffic."
+  type        = string
+}
