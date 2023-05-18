@@ -79,7 +79,7 @@ resource "azurerm_network_security_group" "public" {
 
   security_rule {
     name                       = "http"
-    description                = "Allow traffic to server."
+    description                = "Allow traffic http."
     priority                   = 1003
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -92,7 +92,7 @@ resource "azurerm_network_security_group" "public" {
 
     security_rule {
     name                       = "https"
-    description                = "Allow traffic to server."
+    description                = "Allow traffic https."
     priority                   = 1004
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -258,8 +258,8 @@ resource "azurerm_network_security_group" "db" {
   location            = var.location
 
   security_rule {
-    name                       = "Server"
-    description                = "Allow traffic to server."
+    name                       = "db"
+    description                = "Allow traffic to db."
     priority                   = 1002
     access                     = "Allow"
     protocol                   = "Tcp"

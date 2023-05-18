@@ -3,7 +3,7 @@ locals {
   secret_db_password_name  = "db-password"
 }
 resource "azurerm_log_analytics_workspace" "this" {
-  name                = "acctest-01"
+  name                = "acr-log"
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"
@@ -11,7 +11,7 @@ resource "azurerm_log_analytics_workspace" "this" {
 }
 
 resource "azurerm_container_app_environment" "this" {
-  name                       = "Example-Environment"
+  name                       = "my-container-environment"
   location                   = var.location
   resource_group_name        = var.resource_group_name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
@@ -20,7 +20,7 @@ resource "azurerm_container_app_environment" "this" {
 }
 
 resource "azurerm_container_app" "this" {
-  name                         = "example-app"
+  name                         = "my-container-app"
   container_app_environment_id = azurerm_container_app_environment.this.id
   resource_group_name          = var.resource_group_name
   revision_mode                = "Single"
@@ -44,7 +44,7 @@ resource "azurerm_container_app" "this" {
 
   template {
     container {
-      name   = "examplecontainerapp"
+      name   = "my-student-service"
       
       image  = "tfgcontainerregistry.azurecr.io/java-app:latest"
       cpu    = 0.25
@@ -74,7 +74,7 @@ resource "azurerm_container_app" "this" {
 
   ingress {
     transport = "http"
-    target_port = 8080 //var.server_port
+    target_port = var.server_port
 
     external_enabled = true
     allow_insecure_connections = true
