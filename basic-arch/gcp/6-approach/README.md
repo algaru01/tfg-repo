@@ -12,6 +12,7 @@ Este módulo crea únicamente un Artifact Registry donde guardar las imágenes p
 
 
 ### Outputs
+* `name`. Nombre del repositorio.
 
 ## `CR`
 Este módulo creará el servicio de Cloud Run que lanzará los contenedores que ejecutarán cada microservicio. Consta de los siguientes recursos:
@@ -22,6 +23,8 @@ Este módulo creará el servicio de Cloud Run que lanzará los contenedores que 
 * `google_cloud_run_v2_service_iam_binding`. Configura los permisos necesarios para lanzar un contenedor.
 * `google_compute_region_network_endpoint_group`. Configura un grupo de extremos de red (NEG) que especifica un grupo de extremos de backend para un balanceador de carga. En este caso será nuestro servicio de Cloud Run.
 ### Inputs
+* `location`. Región donde se lanzará el servicio de Cloud Run.
+* `ar_name`. Nombre del repositoro donde se encuentra la imagen Docker que usará el contenedor.
 * `db_address`. Dirección de la base de datos.
 * `db_port`. Puerto de la base de datos.
 * `db_user`. Usuario de la base de datos.
