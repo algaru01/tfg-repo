@@ -1,3 +1,0 @@
-Este código creará una imágen para una máquina virtual de GCP que configurará un Ubuntu 18.04 para tener preinstalado el entorno necesario para ejecutar un webserver. En este caso actualizará el sistema,instalará el openJDK 17 y subirá el archivo JAR con el código compilado.
-
-Para obtener las imágenes que hay disponibles en google cloud puedes usar este comando en el CLI: gcloud compute images list
