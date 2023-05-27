@@ -15,6 +15,11 @@ variable "private_subnets" {
   default     = null
 }
 
+variable "nat_subnet" {
+  description = "CIDR for the Public subnet where the NAT gateway that private subnets use will be placed."
+  type = string
+}
+
 variable "public_subnets_availability_zone" {
   description = "List of the availability zone of each public subnet."
   type        = list(string)

@@ -1,6 +1,6 @@
 [
   {
-    "name": "my-app",
+    "name": "${name}",
     "image": "${aws_ecr_repository}:${tag}",
     "essential": true,
     "logConfiguration": {
@@ -11,6 +11,7 @@
         "awslogs-group": "${prefix}-log-group"
       }
     },
+    "network_mode": "awsvpc",
     "portMappings": [
       {
         "containerPort": ${port},

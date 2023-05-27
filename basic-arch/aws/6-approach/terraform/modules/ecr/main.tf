@@ -1,6 +1,6 @@
 
 resource "aws_ecr_repository" "repo" {
-  name = "${var.prefix}/ecr-repo"
+  name = "${var.prefix}/ecr-repo2"
 }
 
 resource "aws_ecr_lifecycle_policy" "repo-policy" {

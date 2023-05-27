@@ -61,34 +61,44 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-resource "aws_lb_listener_rule" "forward_all" {
+resource "aws_lb_listener_rule" "auth" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 100
 
   condition {
     path_pattern {
-      values = ["*"]
+      values = ["/api/v1/auth/*"]
     }
   }
-
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.main.arn
-  }
-
-  tags = {
-    Name = "myLbListenerRule-ForwardAll"
+    target_group_arn = aws_lb_target_group.auth.arn
   }
 }
 
-resource "aws_lb_target_group" "main" {
-  port     = var.server_port
+resource "aws_lb_listener_rule" "products" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 101
+
+  condition {
+    path_pattern {
+      values = ["/api/v1/product/*"]
+    }
+  }
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.products.arn
+  }
+}
+
+resource "aws_lb_target_group" "auth" {
+  port     = var.auth_server_port
   protocol = local.http_protocol
   vpc_id   = var.vpc_id
   target_type = "ip"
 
   health_check {
-    path                = "/api/v1/student/hello"
+    path                = "/api/v1/auth/hello"
     protocol            = local.http_protocol
     matcher             = "200"
     interval            = 90
@@ -96,8 +106,21 @@ resource "aws_lb_target_group" "main" {
     healthy_threshold   = 3
     unhealthy_threshold = 2
   }
+}
 
-  tags = {
-    Name = "myLbTargetGroup-main"
+resource "aws_lb_target_group" "products" {
+  port     = var.products_server_port
+  protocol = local.http_protocol
+  vpc_id   = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    path                = "/api/v1/products/hello"
+    protocol            = local.http_protocol
+    matcher             = "200"
+    interval            = 90
+    timeout             = 20
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
   }
 }

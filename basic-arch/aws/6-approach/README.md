@@ -1,6 +1,8 @@
 # 6 Acercamiento
 En este nuevo acercamiento se sustituirán las máquinas virtuales por contenedores del servicio AWS Fargate. Este ervicio Cloud te permite correr contenedores sin tener que gestionar máquinas EC2 de Amazon, lo que te permite centrarte simplemente en el entorno que correrá tu aplicación. Para ello se han desarrollado dos nuevos módulos que sustituirán al antiguo `ASG`.
 
+Además se ha desarrollado un nuevo microservicio de modo que este nuevo nivel incluya también la comunicación servidor-servidor.
+
 En apartados anteriores, para desplegar nuestro codigo en cada máquina virtual haciamos uso de Packer para crear imágenes sobre la que se construiria cada EC2. En este caso, se hace uso de Docker.
 Para ello, se ha creado un Dockerfile que permite definir en sus variables de entorno ciertos rasgos del código, para poder modificarlo cuando queramos; y lanza nuestro código a partir de la imagen openjdk:17-oracle.
 Para subir la imagen al contenedor privado de ECR(importante, este contenedor debe de haber sido creado previamente), primero creamos la imagen ejecutando dicho Dockerfile con:
@@ -38,11 +40,16 @@ Este módulo contiiene los recursos necesarios para desplgear un contenedor en A
 * `VPC`. ID del VPC donde se desplegarán los recursos.
 * `subnets`. Subnets donde se desplegarán los servicios.
 * `region`. Región donde se desplegarán los recursos.
-* `lb_target_group_arn`. ARN del Load Balancer que distribuirá el tráfico a estos servicios.
+* `lb_X_target_group_arn`. ARN del Load Balancer que distribuirá el tráfico al servicio X.
 * `lb_sg`. Grupo de seguirdad del Load Balancer de donde únicamente aceptará tráfico TCP estas instancias.
 * `repository_url`. URL del repositorio donde se almacena la imagen que se desplegará.
 * `db_address`. Dirección de la base de datos.
 * `db_user`. Usuario de la base de datos.
 * `db_password`. Contraseña del usuario de la base de datos.
 * `db_port`. Puerto de la base de datos.
-* `server_port`. Puerto donde se despliega el servidor.
+* `auth_url`. URL del servicio de autenticación.
+* `X_server_port`. Puerto donde se despliega el servicio X.
+
+## Cambios en otros módulos.
+Ahora el Balanceador de Carga tiene 2 `aws_lb_listener_rule` y 2 `aws_lb_target_group`, uno para cada microservicio.
+En el módlo `VPC`se ha añadido un `aws_nat_gateway` que será usado por los dos microservicios para acceder al ECR y descargarse la imágen. Este NAT Gateway se lanza en una subnet pública y permite enviar tráfico hacia Internet pero no recibir, por lo que es perfecta para subredes privadas que requieren de ciertas conexiones afuera de la VPC, como en este caso. Para ello, la subred privada ahora tiene una tabla de rutas nueva que envia estas conexiones afuera de la VPC a través de la NAT.

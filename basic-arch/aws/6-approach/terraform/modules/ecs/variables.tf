@@ -8,8 +8,13 @@ variable "subnets" {
     type = list(string)
 }
 
-variable "lb_target_group_arn" {
-  description = "ARN of the LB that will distribuite traffic to these services."
+variable "lb_auth_target_group_arn" {
+  description = "ARN of the LB target group that will distribuite traffic to the auth service."
+  type = string
+}
+
+variable "lb_products_target_group_arn" {
+  description = "ARN of the LB target group that will distribuite traffic to the products service."
   type = string
 }
 
@@ -49,12 +54,22 @@ variable "db_port" {
   type        = string
 }
 
+variable "auth_url" {
+  description = "URL to access to the Auth service."
+  type        = string
+}
+
 variable "region" {
   description = "Region where this ECS will be deployed."
   type        = string
 }
 
-variable "server_port" {
-  description = "Port where the server will be deployed."
+variable "auth_server_port" {
+  description = "Port where the auth server will be deployed."
+  type        = string
+}
+
+variable "products_server_port" {
+  description = "Port where the products server will be deployed."
   type        = string
 }

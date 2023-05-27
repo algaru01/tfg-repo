@@ -1,5 +1,11 @@
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
+variable "auth_server_port" {
+  description = "The port the auth server will use for HTTP requests"
+  type        = number
+  default     = 8081
+}
+
+variable "products_server_port" {
+  description = "The port the products server will use for HTTP requests"
   type        = number
   default     = 8080
 }

@@ -8,7 +8,12 @@ variable "public_subnets_id" {
   type        = list(string)
 }
 
-variable "server_port" {
-  description = "Server port for target group."
+variable "auth_server_port" {
+  description = "Server port for auth target group."
+  type        = string
+}
+
+variable "products_server_port" {
+  description = "Server port for products target group."
   type        = string
 }
