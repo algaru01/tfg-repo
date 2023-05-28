@@ -37,9 +37,10 @@ module "ag" {
 
   ag_subnet = module.vnet.public_subnets[0]
 
-  backend_fqdn = module.aca.fqdn
-  backend_ips = [ module.aca.ip_address ]
+  products_fqdn = module.aca.products_fqdn
+  auth_fqdn = module.aca.auth_fqdn
 
+  backend_ips = [ module.aca.ip_address ]
   server_port = var.server_port
 }
 
@@ -51,7 +52,8 @@ module "aca" {
 
   subnet              = module.vnet.private_subnets[0]
 
-  ingress_target_port = var.server_port
+  products_ingress_target_port = var.server_port
+  auth_ingress_target_port = 8081
 
   acr_username = module.acr.username
   acr_password = module.acr.password
@@ -61,6 +63,8 @@ module "aca" {
   db_port     = "5432"
   db_password = var.db_password
   db_user     = var.db_user
+
+  //auth_url = "${module.ag.ag_public_ip}:${module.ag.ag_port}"
 }
 
 module "acr" {

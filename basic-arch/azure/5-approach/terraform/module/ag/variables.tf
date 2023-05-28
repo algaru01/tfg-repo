@@ -19,11 +19,17 @@ variable "ag_subnet" {
   type = string
 }
 
-variable "backend_fqdn" {
-  description = "List of FQDNS to use as as backends"
+variable "products_fqdn" {
+  description = "FQDN of the product service where distribute traffic to."
+  type        = string
+}
+
+variable "auth_fqdn" {
+  description = "FQDN of the auth service where distribute traffic to."
   type        = string
 }
 
 variable "backend_ips" {
+  description = "List of IPs to use as backend."
   type        = list(string)
 }

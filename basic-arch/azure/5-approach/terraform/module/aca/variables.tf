@@ -50,7 +50,17 @@ variable "db_password" {
   type        = string
 }
 
-variable "ingress_target_port" {
+variable "products_ingress_target_port" {
   description = "The target port on the container for the Ingress traffic."
   type        = string
 }
+
+variable "auth_ingress_target_port" {
+  description = "The target port on the container for the Ingress traffic."
+  type        = string
+}
+
+/* variable "auth_url" {
+  description = "URL of the auth service."
+  type        = string
+} */
