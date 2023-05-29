@@ -7,7 +7,6 @@ resource "google_sql_database" "this" {
 resource "google_sql_database" "student" {
   name     = "student"
   instance = google_sql_database_instance.this.name
-
 }
 
 resource "google_compute_global_address" "this" {
@@ -29,7 +28,7 @@ resource "google_sql_database_instance" "this" {
   database_version = "POSTGRES_13"
 
   settings {
-    tier = "db-f1-micro"
+    tier = "db-g1-small"
 
     ip_configuration {
       ipv4_enabled    = false
@@ -38,7 +37,7 @@ resource "google_sql_database_instance" "this" {
     }
   }
 
-  root_password = "password"
+  root_password = "password" //Var
 
   deletion_protection = false
 

@@ -37,6 +37,7 @@ module "cr" {
   source = "./modules/cr"
 
   location = "europe-southwest1"
+  project_id = "basic-arch-384210"
 
   ar_name = module.ar.name
 
@@ -56,7 +57,8 @@ module "lb" {
   vpc = module.vpc.vpc
 
   check_port    = var.server_port
-  backend_group = module.cr.network_endpoint_group_id
+  products_backend_group = module.cr.products_network_endpoint_group_id
+  auth_backend_group = module.cr.auth_network_endpoint_group_id
 
   depends_on = [ module.vpc ]
 }

@@ -3,6 +3,10 @@ variable "location" {
   type = string
 }
 
+variable "project_id" {
+  type = string
+}
+
 variable "ar_name" {
   description = "Name of the Artifact Registry where Docker images are stored."
   type = string
