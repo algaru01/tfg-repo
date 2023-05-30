@@ -7,6 +7,14 @@ variable "project_id" {
   type = string
 }
 
+variable "products_port" {
+  type = string
+}
+
+variable "auth_port" {
+  type = string
+}
+
 variable "ar_name" {
   description = "Name of the Artifact Registry where Docker images are stored."
   type = string

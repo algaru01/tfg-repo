@@ -12,6 +12,10 @@ resource "google_cloud_run_v2_service" "products" {
         cpu_idle = false
       }
 
+      ports {
+        container_port = var.products_port
+      }
+
       env {
         name = "DATABASE_ADDRESS"
         value = var.db_address
@@ -62,7 +66,7 @@ resource "google_cloud_run_v2_service" "auth" {
       }
 
       ports {
-        container_port = 8081
+        container_port = var.auth_port
       }
 
       env {
