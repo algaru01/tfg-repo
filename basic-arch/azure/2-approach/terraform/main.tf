@@ -34,7 +34,7 @@ module "ag" {
 
   ag_subnet = module.vnet.public_subnets[1]
 
-  server_port = var.server_port
+  backend_port = var.server_port
 }
 
 module "ss" {
@@ -44,6 +44,8 @@ module "ss" {
   location            = azurerm_resource_group.this.location
 
   ss_subnet = module.vnet.public_subnets[0]
+
+  number_instances = 2
 
   ag_backend_address_pool = module.ag.ag_backend_address_pool.id
 

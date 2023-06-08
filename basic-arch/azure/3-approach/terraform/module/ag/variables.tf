@@ -8,8 +8,8 @@ variable "location" {
   type        = string
 }
 
-variable "server_port" {
-  description = "Port where the server will run."
+variable "backend_port" {
+  description = "Port where distribute traffic in backend."
   type        = number
   default     = 8080
 }

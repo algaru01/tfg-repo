@@ -29,14 +29,21 @@ resource "azurerm_application_gateway" "this" {
     subnet_id = var.ag_subnet
   }
 
+  frontend_ip_configuration {
+    name                 = local.frontend_ip_configuration_name
+    public_ip_address_id = azurerm_public_ip.this.id
+  }
+
   frontend_port {
     name = local.frontend_port_name
     port = 8080
   }
 
-  frontend_ip_configuration {
-    name                 = local.frontend_ip_configuration_name
-    public_ip_address_id = azurerm_public_ip.this.id
+  http_listener {
+    name                           = local.http_listener_name
+    frontend_ip_configuration_name = local.frontend_ip_configuration_name
+    frontend_port_name             = local.frontend_port_name
+    protocol                       = "Http"
   }
 
   backend_address_pool {
@@ -46,16 +53,9 @@ resource "azurerm_application_gateway" "this" {
   backend_http_settings {
     name                  = local.backend_http_settings_name
     cookie_based_affinity = "Disabled"
-    port                  = 8080
+    port                  = var.backend_port
     protocol              = "Http"
     request_timeout       = 60
-  }
-
-  http_listener {
-    name                           = local.http_listener_name
-    frontend_ip_configuration_name = local.frontend_ip_configuration_name
-    frontend_port_name             = local.frontend_port_name
-    protocol                       = "Http"
   }
 
   request_routing_rule {

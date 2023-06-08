@@ -14,7 +14,7 @@ variable "cidr_block" {
 }
 
 variable "public_subnets" {
-  description = "List of the ids of the public subnets in such VNet."
+  description = "List of the CIDR of the public subnets to be created in such VNet."
   type        = list(string)
 }
 

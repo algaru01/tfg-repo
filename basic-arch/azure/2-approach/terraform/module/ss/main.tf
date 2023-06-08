@@ -4,7 +4,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
+  instances           = var.number_instances
   sku                 = "Standard_B1ls"
+  admin_username      = "ubuntu"
+
   source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
@@ -34,15 +37,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     storage_account_type = "Standard_LRS"
   }
 
-  instances = 2
-
 /*   upgrade_mode = "Automatic"
   health_probe_id = var.lb_probe
   automatic_instance_repair {
     enabled = true
   } */
 
-  admin_username = "ubuntu"
   custom_data    = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
 
 /*   depends_on = [

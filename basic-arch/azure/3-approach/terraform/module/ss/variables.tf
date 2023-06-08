@@ -19,6 +19,11 @@ variable "server_port" {
   default     = 8080
 }
 
+variable "number_instances" {
+  description = "Number of instances to deploy."
+  type        = number
+}
+
 variable "ag_backend_address_pool" {
   description = "Backend Address Pool of the Application Gateway that will be linked to this SS."
   type = string
