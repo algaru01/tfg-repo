@@ -27,3 +27,8 @@ variable "max_size" {
   description = "Maximum number of EC2 instances."
   type        = number
 }
+
+variable "vpc_cidr_block" {
+  description = "VPC CIDR block to allow its internal traffic."
+  type        = string
+}

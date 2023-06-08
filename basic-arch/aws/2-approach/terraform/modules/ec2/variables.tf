@@ -17,3 +17,8 @@ variable "vpc" {
   description = "VPC where these EC2 belong to."
   type        = string
 }
+
+variable "vpc_cidr_block" {
+  description = "VPC CIDR block to allow its internal traffic."
+  type        = string
+}

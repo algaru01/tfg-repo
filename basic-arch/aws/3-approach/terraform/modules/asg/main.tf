@@ -15,7 +15,7 @@ resource "aws_launch_template" "this" {
 
   user_data = filebase64("${path.cwd}/../scripts/init-script.sh")
 
-  vpc_security_group_ids = [ aws_security_group.allow_http.id ]
+  vpc_security_group_ids = [ aws_security_group.allow_http_ssh_icmp.id ]
 
   tags = {
     Name = "myASGLaunchTemplate"
@@ -48,7 +48,7 @@ resource "aws_autoscaling_group" "this" {
   autoscaling_group_name = aws_autoscaling_group.this.name
 } */
 
-resource "aws_security_group" "allow_http" {
+resource "aws_security_group" "allow_http_ssh_icmp" {
   vpc_id = var.vpc_id
 
   ingress {
@@ -77,7 +77,7 @@ resource "aws_security_group" "allow_http" {
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks = ["10.0.0.0/16"] //Cambiar a variable
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   tags = {
