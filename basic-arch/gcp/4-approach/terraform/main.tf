@@ -46,6 +46,7 @@ module "lb" {
 
   vpc = module.vpc.vpc
 
+  backend_port           = module.mig.named_port
   check_port             = var.server_port
   instance_group_backend = module.mig.instance_group
 

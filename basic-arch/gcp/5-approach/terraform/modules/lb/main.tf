@@ -26,7 +26,7 @@ resource "google_compute_region_backend_service" "this" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
   health_checks         = [google_compute_region_health_check.this.id]
 
-  port_name   = "server-port"
+  port_name   = var.backend_port
   protocol    = "HTTP"
   timeout_sec = 10
 
@@ -46,7 +46,7 @@ resource "google_compute_region_health_check" "this" {
 
 
   http_health_check {
-    request_path = "/"
+    request_path = "/api/v1/student/hello"
     port         = var.check_port
   }
 }

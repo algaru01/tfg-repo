@@ -42,6 +42,11 @@ resource "google_compute_instance_group_manager" "this" {
     instance_template = google_compute_instance_template.this.id
   }
 
+  named_port {
+    name = "server-port"
+    port = var.server_port
+  }
+
   auto_healing_policies {
     health_check      = google_compute_health_check.this.id
     initial_delay_sec = 300
@@ -76,7 +81,7 @@ resource "google_compute_health_check" "this" {
   unhealthy_threshold = 10
 
   http_health_check {
-    request_path = "/"
+    request_path = "/api/v1/student/hello"
     port         = var.server_port
   }
 }

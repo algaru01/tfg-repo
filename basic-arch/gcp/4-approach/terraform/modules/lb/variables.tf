@@ -12,3 +12,8 @@ variable "vpc" {
   description = "Network where deploy this Load Balancer"
   type        = string
 }
+
+variable "backend_port" {
+  description = "Name of the port of the backend where distribute traffic."
+  type        = string
+}
