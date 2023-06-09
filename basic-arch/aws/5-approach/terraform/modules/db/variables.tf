@@ -8,6 +8,11 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
+variable "servers_subnets" {
+  description = "List of subnets with servers that will access this database."
+  type        = list(string)
+}
+
 variable "port" {
   description = "Port to communicate with database."
   type        = string

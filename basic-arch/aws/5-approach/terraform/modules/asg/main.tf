@@ -36,7 +36,7 @@ resource "aws_launch_template" "this" {
 
 resource "aws_autoscaling_group" "this" {
   name                = "myAutoscalingGroup"
-  vpc_zone_identifier = var.public_subnets_id
+  vpc_zone_identifier = var.subnets
   target_group_arns   = var.target_group_arns
 
   launch_template {

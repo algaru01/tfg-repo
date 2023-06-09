@@ -27,7 +27,7 @@ build {
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "shell" {
-    script = "./init-script.sh"
+    script = "./init-script.sh" #Actualiza el sistema e instala openjdk-17
   }
 
   provisioner "file" {

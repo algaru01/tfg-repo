@@ -27,7 +27,7 @@ module "asg" {
   source = "./modules/asg"
 
   vpc_id         = module.vpc.vpc_id
-  public_subnets = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
+  subnets = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
   vpc_cidr_block = "10.0.0.0/16"
   server_port    = var.server_port
 

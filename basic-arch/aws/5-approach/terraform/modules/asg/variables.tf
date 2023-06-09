@@ -18,8 +18,8 @@ variable "db_password" {
   type        = string
 }
 
-variable "public_subnets_id" {
-  description = "List of public subnets ids where this autoscaling group works."
+variable "subnets" {
+  description = "List of subnets ids where this autoscaling group works."
   type        = list(string)
 }
 

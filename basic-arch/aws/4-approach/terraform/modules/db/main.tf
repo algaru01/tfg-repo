@@ -22,7 +22,7 @@ resource "aws_security_group" "allow_all_inbound" {
     from_port   = var.port
     to_port     = var.port
     protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips #Quizás poner la subnet pública del asg?
+    cidr_blocks = var.servers_subnets
   }
 
   tags = {
@@ -32,16 +32,20 @@ resource "aws_security_group" "allow_all_inbound" {
 
 resource "aws_db_instance" "this" {
   identifier             = "my-rds-tfg"
-  db_name                = "student"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 5
-  engine                 = "postgres"
-  port                   = var.port
-  skip_final_snapshot    = true
+
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.allow_all_inbound.id]
+
+  instance_class         = "db.t3.micro"
+  engine                 = "postgres"
+  storage_type           = "gp2"
+  allocated_storage      = 5
   multi_az               = true
 
-  username = var.username
-  password = var.password
+  db_name                = "student"
+  port                   = var.port
+  username               = var.username
+  password               = var.password
+
+  skip_final_snapshot    = true
 }

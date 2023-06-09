@@ -3,8 +3,8 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "public_subnets" {
-  description = "List of public subnets where this autoscaling group works."
+variable "subnets" {
+  description = "List of subnets where this autoscaling group works."
   type        = list(string)
 }
 
