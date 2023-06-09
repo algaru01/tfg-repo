@@ -7,7 +7,7 @@ resource "aws_security_group" "allow_from_alb" {
   description = "allow inbound access from the ALB only"
   vpc_id      = var.vpc
 
-/*   ingress {
+  /*   ingress {
     protocol        = "tcp"
     from_port       = var.auth_server_port
     to_port         = var.auth_server_port
@@ -24,10 +24,10 @@ resource "aws_security_group" "allow_from_alb" {
   } */
 
   ingress {
-    protocol        = "-1"
-    from_port       = 0
-    to_port         = 0
-    cidr_blocks     = ["0.0.0.0/0"]
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -70,16 +70,16 @@ resource "aws_ecs_task_definition" "auth" {
   cpu                      = 256
   memory                   = 2048
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = templatefile("${path.cwd}/../files/app.json.tpl", {
-          name               = "${var.prefix}-auth-service"
-          aws_ecr_repository = var.repository_url
-          tag                = "auth-micro"
-          app_port           = var.auth_server_port
-          region             = var.region
-          prefix             = "${var.prefix}"
-          envvars            = {"DATABASE_ADDRESS"=var.db_address, "DATABASE_PORT"=var.db_port, "DATABASE_USER"=var.db_user, "DATABASE_PASSWORD"=var.db_password}
-          port               = var.auth_server_port
-      })
+  container_definitions = templatefile("${path.cwd}/../files/app.json.tpl", {
+    name               = "${var.prefix}-auth-service"
+    aws_ecr_repository = var.repository_url
+    tag                = "auth-micro"
+    app_port           = var.auth_server_port
+    region             = var.region
+    prefix             = "${var.prefix}"
+    envvars            = { "DATABASE_ADDRESS" = var.db_address, "DATABASE_PORT" = var.db_port, "DATABASE_USER" = var.db_user, "DATABASE_PASSWORD" = var.db_password }
+    port               = var.auth_server_port
+  })
 }
 
 resource "aws_ecs_task_definition" "products" {
@@ -89,16 +89,16 @@ resource "aws_ecs_task_definition" "products" {
   cpu                      = 256
   memory                   = 2048
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = templatefile("${path.cwd}/../files/app.json.tpl", {
-          name               = "${var.prefix}-products-service"
-          aws_ecr_repository = var.repository_url
-          tag                = "products-micro"
-          app_port           = var.products_server_port
-          region             = var.region
-          prefix             = "${var.prefix}"
-          envvars            = {"DATABASE_ADDRESS"=var.db_address, "DATABASE_PORT"=var.db_port, "DATABASE_USER"=var.db_user, "DATABASE_PASSWORD"=var.db_password, "AUTH_URL"=var.auth_url}
-          port               = var.products_server_port
-      })
+  container_definitions = templatefile("${path.cwd}/../files/app.json.tpl", {
+    name               = "${var.prefix}-products-service"
+    aws_ecr_repository = var.repository_url
+    tag                = "products-micro"
+    app_port           = var.products_server_port
+    region             = var.region
+    prefix             = "${var.prefix}"
+    envvars            = { "DATABASE_ADDRESS" = var.db_address, "DATABASE_PORT" = var.db_port, "DATABASE_USER" = var.db_user, "DATABASE_PASSWORD" = var.db_password, "AUTH_URL" = var.auth_url }
+    port               = var.products_server_port
+  })
 }
 
 resource "aws_ecs_service" "auth" {
@@ -109,8 +109,8 @@ resource "aws_ecs_service" "auth" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.allow_from_alb.id]
-    subnets          = var.subnets
+    security_groups = [aws_security_group.allow_from_alb.id]
+    subnets         = var.subnets
     //assign_public_ip = true
   }
 
@@ -131,8 +131,8 @@ resource "aws_ecs_service" "products" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.allow_from_alb.id]
-    subnets          = var.subnets
+    security_groups = [aws_security_group.allow_from_alb.id]
+    subnets         = var.subnets
     //assign_public_ip = true
   }
 

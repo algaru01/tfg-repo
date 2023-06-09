@@ -30,7 +30,7 @@ module "asg" {
   source = "./modules/asg"
 
   vpc_id         = module.vpc.vpc_id
-  public_subnets = [ module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1] ]
+  public_subnets = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
 
   server_port = var.server_port
   db_address  = module.db.address
@@ -39,8 +39,8 @@ module "asg" {
 
   target_group_arns = [module.lb.main_target_group_arn]
 
-  min_size = 2
-  max_size = 5
+  min_size         = 2
+  max_size         = 5
   desired_capacity = 2
 
   depends_on = [
@@ -52,7 +52,7 @@ module "lb" {
   source = "./modules/lb"
 
   vpc_id         = module.vpc.vpc_id
-  public_subnets = [ module.vpc.public_subnets_id[2], module.vpc.public_subnets_id[3] ]
+  public_subnets = [module.vpc.public_subnets_id[2], module.vpc.public_subnets_id[3]]
   server_port    = var.server_port
 }
 

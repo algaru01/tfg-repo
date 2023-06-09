@@ -62,8 +62,8 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_network_interface" "this" {
-  subnet_id = var.subnet
-  security_groups = [ aws_security_group.allow_http.id ]
+  subnet_id       = var.subnet
+  security_groups = [aws_security_group.allow_http.id]
 }
 
 resource "aws_instance" "ec2" {
@@ -72,13 +72,13 @@ resource "aws_instance" "ec2" {
   instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
   ami           = data.aws_ami.ubuntu.id
   network_interface {
-    device_index = 0
+    device_index         = 0
     network_interface_id = aws_network_interface.this.id
   }
   key_name = aws_key_pair.this.key_name
 
-  
-  user_data = <<-EOF
+
+  user_data                   = <<-EOF
             #!/bin/bash
             echo "Hello, World" > index.html
             nohup busybox httpd -f -p ${var.server_port} &

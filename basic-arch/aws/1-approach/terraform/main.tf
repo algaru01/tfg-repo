@@ -52,7 +52,7 @@ resource "aws_instance" "ec2" {
   instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
   ami           = data.aws_ami.ubuntu.id
 
-  user_data = <<-EOF
+  user_data                   = <<-EOF
             #!/bin/bash
             echo "Hello, World" > index.html
             nohup busybox httpd -f -p ${var.server_port} &

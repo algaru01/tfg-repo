@@ -92,9 +92,9 @@ resource "aws_lb_listener_rule" "products" {
 }
 
 resource "aws_lb_target_group" "auth" {
-  port     = var.auth_server_port
-  protocol = local.http_protocol
-  vpc_id   = var.vpc_id
+  port        = var.auth_server_port
+  protocol    = local.http_protocol
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
@@ -109,9 +109,9 @@ resource "aws_lb_target_group" "auth" {
 }
 
 resource "aws_lb_target_group" "products" {
-  port     = var.products_server_port
-  protocol = local.http_protocol
-  vpc_id   = var.vpc_id
+  port        = var.products_server_port
+  protocol    = local.http_protocol
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {

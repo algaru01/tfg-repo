@@ -10,5 +10,5 @@ output "vpc" {
 
 output "connector" {
   description = ""
-  value = google_vpc_access_connector.connector.id
+  value       = google_vpc_access_connector.connector.id
 }

@@ -1,37 +1,37 @@
 variable "vpc" {
   description = "ID of the VPC where these services will be deployed."
-  type = string
+  type        = string
 }
 
 variable "subnets" {
   description = "Subnets where these services will be deployed."
-    type = list(string)
+  type        = list(string)
 }
 
 variable "lb_auth_target_group_arn" {
   description = "ARN of the LB target group that will distribuite traffic to the auth service."
-  type = string
+  type        = string
 }
 
 variable "lb_products_target_group_arn" {
   description = "ARN of the LB target group that will distribuite traffic to the products service."
-  type = string
+  type        = string
 }
 
 variable "lb_sg" {
   description = "Unique security group from where these services will accept TCP traffic, in this case form the LB."
-  type = string
+  type        = string
 }
 
 variable "prefix" {
   description = "Prefix used for naming instances."
-  type = string
-  default = "my"
+  type        = string
+  default     = "my"
 }
 
 variable "repository_url" {
   description = "URL of the respository where image used will be recovered from."
-  type = string
+  type        = string
 }
 
 variable "db_address" {

@@ -24,7 +24,7 @@ module "vnet" {
 
   cidr_block      = "10.0.0.0/16"
   private_subnets = ["10.0.8.0/21"]
-  public_subnets = [ "10.0.0.0/21"]
+  public_subnets  = ["10.0.0.0/21"]
   bastion_subnet  = "10.0.200.0/27"
   db_subnet       = "10.0.201.0/28"
 }
@@ -38,9 +38,9 @@ module "ag" {
   ag_subnet = module.vnet.public_subnets[0]
 
   products_fqdn = module.aca.products_fqdn
-  auth_fqdn = module.aca.auth_fqdn
+  auth_fqdn     = module.aca.auth_fqdn
 
-  backend_ips = [ module.aca.ip_address ]
+  backend_ips = [module.aca.ip_address]
   server_port = var.server_port
 }
 
@@ -50,13 +50,13 @@ module "aca" {
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 
-  subnet              = module.vnet.private_subnets[0]
+  subnet = module.vnet.private_subnets[0]
 
   products_ingress_target_port = var.server_port
-  auth_ingress_target_port = 8081
+  auth_ingress_target_port     = 8081
 
-  acr_username = module.acr.username
-  acr_password = module.acr.password
+  acr_username     = module.acr.username
+  acr_password     = module.acr.password
   acr_login_server = module.acr.login_server
 
   db_address  = module.db.db_address

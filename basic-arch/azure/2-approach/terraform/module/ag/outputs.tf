@@ -5,5 +5,5 @@ output "ag_public_ip" {
 
 output "ag_backend_address_pool" {
   description = "Backend Addess Pool that will be linked to the SS"
-  value = one(azurerm_application_gateway.this.backend_address_pool)
+  value       = one(azurerm_application_gateway.this.backend_address_pool)
 }

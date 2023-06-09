@@ -26,9 +26,9 @@ module "vpc" {
 module "lb" {
   source = "./modules/lb"
 
-  vpc_id            = module.vpc.vpc_id
-  public_subnets_id = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
-  auth_server_port  = var.auth_server_port
+  vpc_id               = module.vpc.vpc_id
+  public_subnets_id    = [module.vpc.public_subnets_id[0], module.vpc.public_subnets_id[1]]
+  auth_server_port     = var.auth_server_port
   products_server_port = var.products_server_port
 }
 
@@ -37,11 +37,11 @@ module "ecs" {
 
   region = "eu-west-1"
 
-  vpc = module.vpc.vpc_id
+  vpc     = module.vpc.vpc_id
   subnets = [module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1]]
 
-  lb_sg = module.lb.alb_sg
-  lb_auth_target_group_arn = module.lb.auth_target_group_arn
+  lb_sg                        = module.lb.alb_sg
+  lb_auth_target_group_arn     = module.lb.auth_target_group_arn
   lb_products_target_group_arn = module.lb.products_target_group_arn
 
   repository_url = module.ecr.ecr_repository_url

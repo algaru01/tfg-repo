@@ -16,7 +16,7 @@ variable "server_port" {
 
 variable "ag_subnet" {
   description = "Subnet where this Application Gateway will be deployed."
-  type = string
+  type        = string
 }
 
 variable "products_fqdn" {

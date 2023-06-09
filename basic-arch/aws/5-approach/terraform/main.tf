@@ -35,8 +35,8 @@ module "asg" {
 
   target_group_arns = [module.lb.main_target_group_arn]
 
-  min_size = 2
-  max_size = 5
+  min_size         = 2
+  max_size         = 5
   desired_capacity = 2
 
   depends_on = [

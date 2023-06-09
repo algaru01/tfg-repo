@@ -90,7 +90,7 @@ resource "azurerm_network_security_group" "public" {
     destination_address_prefix = "*"
   }
 
-    security_rule {
+  security_rule {
     name                       = "https"
     description                = "Allow traffic https."
     priority                   = 1004

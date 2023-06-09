@@ -23,9 +23,9 @@ module "ec2" {
 
   number_instances = 2
 
-  vpc    = module.vpc.vpc_id
+  vpc            = module.vpc.vpc_id
   vpc_cidr_block = "10.0.0.0/16"
-  subnet = module.vpc.public_subnets[0]
+  subnet         = module.vpc.public_subnets[0]
 
   server_port = var.server_port
 }

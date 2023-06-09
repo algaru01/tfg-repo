@@ -1,12 +1,12 @@
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
-  name                = "myLinuxVMScaleSet"
+  name = "myLinuxVMScaleSet"
 
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  instances           = var.number_instances
-  sku                 = "Standard_B1ls"
-  admin_username      = "ubuntu"
+  instances      = var.number_instances
+  sku            = "Standard_B1ls"
+  admin_username = "ubuntu"
 
   source_image_reference {
     publisher = "Canonical"
@@ -18,10 +18,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     name    = "myNIC"
     primary = true
     ip_configuration {
-      name                                   = "IPConfiguration"
-      subnet_id                              = var.ss_subnet
-      application_gateway_backend_address_pool_ids = [ var.ag_backend_address_pool ]
-      primary                                = true
+      name                                         = "IPConfiguration"
+      subnet_id                                    = var.ss_subnet
+      application_gateway_backend_address_pool_ids = [var.ag_backend_address_pool]
+      primary                                      = true
       public_ip_address {
         name = "temporal-ip-address"
       }
@@ -37,15 +37,15 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     storage_account_type = "Standard_LRS"
   }
 
-/*   upgrade_mode = "Automatic"
+  /*   upgrade_mode = "Automatic"
   health_probe_id = var.lb_probe
   automatic_instance_repair {
     enabled = true
   } */
 
-  custom_data    = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
+  custom_data = base64encode(templatefile("${path.cwd}/../scripts/init-script.sh", { server_port = var.server_port }))
 
-/*   depends_on = [
+  /*   depends_on = [
     var.lb_rule
   ] */
 }

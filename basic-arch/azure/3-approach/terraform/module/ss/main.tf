@@ -1,12 +1,12 @@
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
-  name                = "myLinuxVMScaleSet"
+  name = "myLinuxVMScaleSet"
 
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  instances           = var.number_instances
-  sku                 = "Standard_B1ls"
-  admin_username      = "ubuntu"
+  instances      = var.number_instances
+  sku            = "Standard_B1ls"
+  admin_username = "ubuntu"
   source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
@@ -17,10 +17,10 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     name    = "myNIC"
     primary = true
     ip_configuration {
-      name                                   = "IPConfiguration"
-      subnet_id                              = var.ss_subnet
-      application_gateway_backend_address_pool_ids = [ var.ag_backend_address_pool ]
-      primary                                = true
+      name                                         = "IPConfiguration"
+      subnet_id                                    = var.ss_subnet
+      application_gateway_backend_address_pool_ids = [var.ag_backend_address_pool]
+      primary                                      = true
       public_ip_address {
         name = "temporal-ip-address"
       }
@@ -37,7 +37,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   }
 
 
-/*   upgrade_mode = "Automatic"
+  /*   upgrade_mode = "Automatic"
   health_probe_id = var.lb_probe
   automatic_instance_repair {
     enabled = true

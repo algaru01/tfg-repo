@@ -1,6 +1,6 @@
 resource "google_compute_instance" "this" {
-  name         = "my-instance"
-  
+  name = "my-instance"
+
   machine_type = "e2-micro"
   boot_disk {
     initialize_params {

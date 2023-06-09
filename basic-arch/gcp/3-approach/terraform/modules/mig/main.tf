@@ -3,7 +3,7 @@ data "google_service_account" "this" {
 }
 
 resource "google_compute_instance_template" "this" {
-  name         = "my-mig-instance-template"
+  name = "my-mig-instance-template"
 
   machine_type = "e2-micro"
   disk {

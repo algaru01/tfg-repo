@@ -24,18 +24,18 @@ resource "google_compute_subnetwork" "proxy" {
 }
 
 resource "google_compute_subnetwork" "connector" {
-  name          = "connector-subnet"
+  name = "connector-subnet"
 
   network       = google_compute_network.this.id
   ip_cidr_range = "10.2.0.0/28"
 
   private_ip_google_access = true
-  
+
 }
 
 
 resource "google_vpc_access_connector" "connector" {
-  name          = "vpc-con"
+  name = "vpc-con"
 
   subnet {
     name = google_compute_subnetwork.connector.name

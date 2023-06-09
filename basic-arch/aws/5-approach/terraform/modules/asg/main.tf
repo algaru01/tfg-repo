@@ -43,8 +43,8 @@ resource "aws_autoscaling_group" "this" {
     id = aws_launch_template.this.id
   }
 
-  min_size = var.min_size
-  max_size = var.max_size
+  min_size         = var.min_size
+  max_size         = var.max_size
   desired_capacity = var.desired_capacity
 
   health_check_type         = "ELB"

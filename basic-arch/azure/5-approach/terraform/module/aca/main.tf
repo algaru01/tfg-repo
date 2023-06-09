@@ -14,11 +14,11 @@ resource "azurerm_log_analytics_workspace" "this" {
 }
 
 resource "azurerm_container_app_environment" "this" {
-  name                       = "my-container-environment"
-  location                   = var.location
-  resource_group_name        = var.resource_group_name
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
-  infrastructure_subnet_id   = var.subnet
+  name                           = "my-container-environment"
+  location                       = var.location
+  resource_group_name            = var.resource_group_name
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
+  infrastructure_subnet_id       = var.subnet
   internal_load_balancer_enabled = true
 }
 
@@ -30,26 +30,26 @@ resource "azurerm_container_app" "products" {
   revision_mode                = "Single"
 
   secret {
-    name = local.pr_secret_ecr_password_name
+    name  = local.pr_secret_ecr_password_name
     value = var.acr_password
   }
 
   secret {
-    name = local.pr_secret_db_password_name
+    name  = local.pr_secret_db_password_name
     value = var.db_password
   }
 
   registry {
     server = var.acr_login_server
 
-    username = var.acr_username
+    username             = var.acr_username
     password_secret_name = local.pr_secret_ecr_password_name
   }
 
   template {
     container {
-      name   = "products-service"
-      
+      name = "products-service"
+
       image  = "tfgcontainerregistry.azurecr.io/products-micro:latest"
       cpu    = 0.75
       memory = "1.5Gi"
@@ -65,7 +65,7 @@ resource "azurerm_container_app" "products" {
       }
 
       env {
-        name = "DATABASE_USERNAME"
+        name  = "DATABASE_USERNAME"
         value = var.db_user
       }
 
@@ -75,20 +75,20 @@ resource "azurerm_container_app" "products" {
       }
 
       env {
-        name = "AUTH_URL"
-        value = azurerm_container_app.auth.latest_revision_fqdn//var.auth_url
+        name  = "AUTH_URL"
+        value = azurerm_container_app.auth.latest_revision_fqdn //var.auth_url
       }
     }
   }
 
   ingress {
-    transport = "http"
+    transport   = "http"
     target_port = var.products_ingress_target_port
 
-    external_enabled = true
+    external_enabled           = true
     allow_insecure_connections = true
     traffic_weight {
-      percentage = 100
+      percentage      = 100
       latest_revision = true
     }
   }
@@ -101,26 +101,26 @@ resource "azurerm_container_app" "auth" {
   revision_mode                = "Single"
 
   secret {
-    name = local.secret_ecr_password_name
+    name  = local.secret_ecr_password_name
     value = var.acr_password
   }
 
   secret {
-    name = local.secret_db_password_name
+    name  = local.secret_db_password_name
     value = var.db_password
   }
 
   registry {
     server = var.acr_login_server
 
-    username = var.acr_username
+    username             = var.acr_username
     password_secret_name = local.secret_ecr_password_name
   }
 
   template {
     container {
-      name   = "auth-service"
-      
+      name = "auth-service"
+
       image  = "tfgcontainerregistry.azurecr.io/auth-micro:latest"
       cpu    = 0.75
       memory = "1.5Gi"
@@ -136,7 +136,7 @@ resource "azurerm_container_app" "auth" {
       }
 
       env {
-        name = "DATABASE_USERNAME"
+        name  = "DATABASE_USERNAME"
         value = var.db_user
       }
 
@@ -148,13 +148,13 @@ resource "azurerm_container_app" "auth" {
   }
 
   ingress {
-    transport = "http"
+    transport   = "http"
     target_port = var.auth_ingress_target_port
 
-    external_enabled = true
+    external_enabled           = true
     allow_insecure_connections = true
     traffic_weight {
-      percentage = 100
+      percentage      = 100
       latest_revision = true
     }
   }

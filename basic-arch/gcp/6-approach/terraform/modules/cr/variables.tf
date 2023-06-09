@@ -1,6 +1,6 @@
 variable "location" {
   description = "Location of the Cloud Run service."
-  type = string
+  type        = string
 }
 
 variable "project_id" {
@@ -17,7 +17,7 @@ variable "auth_port" {
 
 variable "ar_name" {
   description = "Name of the Artifact Registry where Docker images are stored."
-  type = string
+  type        = string
 }
 
 variable "db_address" {

@@ -5,7 +5,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  size                = "Standard_B1ls"
+  size = "Standard_B1ls"
   source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
@@ -50,8 +50,8 @@ resource "azurerm_public_ip" "this" {
   name                = "myLinuxVM-PublicIP"
   resource_group_name = var.resource_group_name
   location            = var.location
-  
-  allocation_method   = "Dynamic"
+
+  allocation_method = "Dynamic"
 
   lifecycle {
     create_before_destroy = true

@@ -26,5 +26,5 @@ variable "number_instances" {
 
 variable "ag_backend_address_pool" {
   description = "Backend Address Pool of the Application Gateway that will be linked to this SS."
-  type = string
+  type        = string
 }

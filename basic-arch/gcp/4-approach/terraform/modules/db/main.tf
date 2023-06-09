@@ -20,10 +20,10 @@ resource "google_service_networking_connection" "this" {
 resource "google_sql_database_instance" "this" {
   name             = "my-db-instance2"
   database_version = "POSTGRES_13"
-  
+
 
   settings {
-    tier = "db-f1-micro"
+    tier      = "db-f1-micro"
     disk_size = 10
 
     ip_configuration {

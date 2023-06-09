@@ -1,14 +1,14 @@
 locals {
-  frontend_ip_configuration_name = "myAG-FrontendIPConfig"
-  products_frontend_port_name             = "myAG-ProductsFrontendPort"
+  frontend_ip_configuration_name      = "myAG-FrontendIPConfig"
+  products_frontend_port_name         = "myAG-ProductsFrontendPort"
   auth_frontend_port_name             = "myAG-AuthFrontendPort"
-  products_backend_http_settings_name     = "myAG-ProductsBackendHTTPSettings"
-  auth_backend_http_settings_name         = "myAG-AuthBackendHTTPSettings"
-  backend_address_pool_name      = "myAG-BackendAddressPool"
-  products_http_listener_name             = "myAG-ProductsHTTPListener"
+  products_backend_http_settings_name = "myAG-ProductsBackendHTTPSettings"
+  auth_backend_http_settings_name     = "myAG-AuthBackendHTTPSettings"
+  backend_address_pool_name           = "myAG-BackendAddressPool"
+  products_http_listener_name         = "myAG-ProductsHTTPListener"
   auth_http_listener_name             = "myAG-AuthHTTPListener"
-  products_probe_name                     = "myAG-products-probe"
-  auth_probe_name                         = "myAG-auth-probe"
+  products_probe_name                 = "myAG-products-probe"
+  auth_probe_name                     = "myAG-auth-probe"
 }
 
 resource "azurerm_public_ip" "this" {
@@ -50,7 +50,7 @@ resource "azurerm_application_gateway" "this" {
   }
 
   backend_address_pool {
-    name = local.backend_address_pool_name
+    name         = local.backend_address_pool_name
     ip_addresses = var.backend_ips
   }
 
@@ -105,22 +105,22 @@ resource "azurerm_application_gateway" "this" {
   }
 
   probe {
-    name                                      = local.products_probe_name
-    host                                      = var.products_fqdn
-    protocol                                  = "Http"
-    path                                      = "/api/v1/product/hello"
-    interval                                  = 90
-    timeout                                   = 90
-    unhealthy_threshold                       = 3
+    name                = local.products_probe_name
+    host                = var.products_fqdn
+    protocol            = "Http"
+    path                = "/api/v1/product/hello"
+    interval            = 90
+    timeout             = 90
+    unhealthy_threshold = 3
   }
 
   probe {
-    name                                      = local.auth_probe_name
-    host                                      = var.auth_fqdn
-    protocol                                  = "Http"
-    path                                      = "/api/v1/auth/hello"
-    interval                                  = 90
-    timeout                                   = 90
-    unhealthy_threshold                       = 3
+    name                = local.auth_probe_name
+    host                = var.auth_fqdn
+    protocol            = "Http"
+    path                = "/api/v1/auth/hello"
+    interval            = 90
+    timeout             = 90
+    unhealthy_threshold = 3
   }
 }

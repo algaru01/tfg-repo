@@ -9,13 +9,13 @@ resource "aws_key_pair" "this" {
 }
 
 resource "aws_launch_template" "this" {
-  image_id               = data.aws_ami.ubuntu.id
-  instance_type          = data.aws_ec2_instance_types.free_instance.instance_types[0]
-  key_name = aws_key_pair.this.key_name
+  image_id      = data.aws_ami.ubuntu.id
+  instance_type = data.aws_ec2_instance_types.free_instance.instance_types[0]
+  key_name      = aws_key_pair.this.key_name
 
   user_data = filebase64("${path.cwd}/../scripts/init-script.sh")
 
-  vpc_security_group_ids = [ aws_security_group.allow_http_ssh_icmp.id ]
+  vpc_security_group_ids = [aws_security_group.allow_http_ssh_icmp.id]
 
   tags = {
     Name = "myASGLaunchTemplate"

@@ -17,7 +17,7 @@ variable "private_subnets" {
 
 variable "nat_subnet" {
   description = "CIDR for the Public subnet where the NAT gateway that private subnets use will be placed."
-  type = string
+  type        = string
 }
 
 variable "public_subnets_availability_zone" {
