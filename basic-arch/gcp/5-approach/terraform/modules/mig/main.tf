@@ -34,11 +34,11 @@ resource "google_compute_instance_template" "this" {
 resource "google_compute_instance_group_manager" "this" {
   name = "my-igm"
 
+  base_instance_name = "instance"
+
   version {
     instance_template = google_compute_instance_template.this.id
   }
-
-  base_instance_name = "autoscaler-sample"
 
   auto_healing_policies {
     health_check      = google_compute_health_check.this.id
@@ -54,6 +54,10 @@ resource "google_compute_autoscaler" "default" {
     max_replicas    = 4
     min_replicas    = 2
     cooldown_period = 60
+
+    cpu_utilization {
+      target = 0.6
+    }
   }
 }
 

@@ -4,13 +4,13 @@ resource "google_compute_network" "this" {
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "public" {
-  count = length(var.public_subnets)
+resource "google_compute_subnetwork" "this" {
+  count = length(var.subnets)
 
-  name    = "my-public-subnet-${count.index}"
+  name    = "my-subnet-${count.index}"
   network = google_compute_network.this.self_link
 
-  ip_cidr_range = var.public_subnets[count.index]
+  ip_cidr_range = var.subnets[count.index]
 }
 
 module "firewall" {

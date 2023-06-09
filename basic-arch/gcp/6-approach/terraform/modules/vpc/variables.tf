@@ -7,3 +7,8 @@ variable "subnets" {
   description = "List of CIDRs for the subnets."
   type        = list(string)
 }
+
+variable "proxy_subnets" {
+  description = "List of CIDRs for the proxy subnets."
+  type        = list(string)
+}

@@ -24,7 +24,8 @@ module "services" {
 module "vpc" {
   source = "./modules/vpc"
 
-  public_subnets = ["10.0.0.0/16"]
+  subnets = ["10.0.0.0/24"]
+  proxy_subnets   = ["10.1.0.0/24"]
 
   server_port = var.server_port
 }
@@ -33,7 +34,7 @@ module "mig" {
   source = "./modules/mig"
 
   server_port = var.server_port
-  subnet      = module.vpc.public_subnets[0]
+  subnet      = module.vpc.subnets[0]
 
   db_address  = module.db.db_address
   db_user     = var.db_user
@@ -42,6 +43,8 @@ module "mig" {
 
 module "lb" {
   source = "./modules/lb"
+
+  vpc = module.vpc.vpc
 
   check_port             = var.server_port
   instance_group_backend = module.mig.instance_group

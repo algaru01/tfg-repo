@@ -4,18 +4,20 @@ resource "google_compute_network" "this" {
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "public" {
-  count = length(var.public_subnets)
+resource "google_compute_subnetwork" "this" {
+  count = length(var.subnets)
 
-  name    = "my-public-subnet-${count.index}"
+  name    = "my-subnet-${count.index}"
   network = google_compute_network.this.self_link
 
-  ip_cidr_range = var.public_subnets[count.index]
+  ip_cidr_range = var.subnets[count.index]
 }
 
 resource "google_compute_subnetwork" "proxy" {
-  name          = "website-net-proxy"
-  ip_cidr_range = "10.129.0.0/26"
+  count = var.proxy_subnets != null ? length(var.proxy_subnets) : 0
+
+  name          = "my-proxy-subnet-${count.index}"
+  ip_cidr_range = var.proxy_subnets[count.index]
   network       = google_compute_network.this.id
   purpose       = "REGIONAL_MANAGED_PROXY"
   role          = "ACTIVE"

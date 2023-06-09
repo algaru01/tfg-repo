@@ -24,7 +24,8 @@ module "services" {
 module "vpc" {
   source = "./modules/vpc"
 
-  subnets = ["10.0.0.0/16", "10.1.0.0/24"]
+  subnets = ["10.0.0.0/24", "10.2.0.0/24"]
+  proxy_subnets   = ["10.1.0.0/24"]
 
   server_port = var.server_port
 }
@@ -42,6 +43,9 @@ module "cr" {
   ar_name = module.ar.name
 
   connector = module.vpc.connector
+
+  products_port = 8080
+  auth_port = 8081
 
   db_address  = module.db.db_address
   db_port     = 5432

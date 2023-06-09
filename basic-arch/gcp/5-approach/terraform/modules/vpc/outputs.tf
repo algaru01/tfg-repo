@@ -1,4 +1,4 @@
-output "public_subnets" {
+output "subnets" {
   description = "List of public subnets."
   value       = google_compute_subnetwork.this[*].self_link
 }

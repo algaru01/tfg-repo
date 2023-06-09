@@ -3,7 +3,12 @@ variable "server_port" {
   type        = number
 }
 
-variable "public_subnets" {
-  description = "List of CIDRs for the public subnets."
+variable "subnets" {
+  description = "List of CIDRs for the subnets."
+  type        = list(string)
+}
+
+variable "proxy_subnets" {
+  description = "List of CIDRs for the proxy subnets."
   type        = list(string)
 }
