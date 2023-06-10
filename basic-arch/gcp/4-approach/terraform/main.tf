@@ -39,6 +39,7 @@ module "mig" {
   db_address  = module.db.db_address
   db_user     = var.db_user
   db_password = var.db_password
+
 }
 
 module "lb" {
@@ -62,4 +63,8 @@ module "db" {
   vpc         = module.vpc.vpc
   db_user     = var.db_user
   db_password = var.db_password
+
+    depends_on = [
+    module.vpc
+  ]
 }

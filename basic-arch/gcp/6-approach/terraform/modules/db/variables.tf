@@ -1,5 +1,5 @@
 variable "vpc" {
-  description = "Private network where this db is deployed."
+  description = "Producer VPC form where connect to this DB."
   type        = string
 }
 
