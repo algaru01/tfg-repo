@@ -17,8 +17,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   name                = "myVMScaleSet"
   resource_group_name = var.resource_group_name
   location            = var.location
+
+  instances           = var.number_instances
+
   sku                 = "Standard_B1s"
-  instances           = 2
+  source_image_id = data.azurerm_image.image.id
+
   admin_username      = "ubuntu"
 
   admin_ssh_key {
@@ -30,8 +34,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-
-  source_image_id = data.azurerm_image.image.id
 
   network_interface {
     name    = "myNIC"

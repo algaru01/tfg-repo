@@ -1,3 +1,12 @@
+data "azurerm_resource_group" "image" {
+  name = "myPackerImages"
+}
+
+data "azurerm_image" "image" {
+  name                = "myPackerImageApplication"
+  resource_group_name = data.azurerm_resource_group.image.name
+}
+
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
   name = "myLinuxVMScaleSet"
 
@@ -5,14 +14,14 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   location            = var.location
 
   instances      = var.number_instances
-  sku            = "Standard_B1ls"
+  
+  source_image_id = data.azurerm_image.image.id
+  sku            = "Standard_B1s"
+
   admin_username = "ubuntu"
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
+
+ 
+  
   network_interface {
     name    = "myNIC"
     primary = true

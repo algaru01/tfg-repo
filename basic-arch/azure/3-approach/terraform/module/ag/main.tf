@@ -4,6 +4,7 @@ locals {
   backend_http_settings_name     = "myAG-BackendHTTPSettings"
   backend_address_pool_name      = "myAG-BackendAddressPool"
   http_listener_name             = "myAG-HTTPListener"
+  probe_name                     = "myAG-products-probe"
 }
 
 resource "azurerm_public_ip" "this" {
@@ -56,6 +57,7 @@ resource "azurerm_application_gateway" "this" {
     port                  = var.backend_port
     protocol              = "Http"
     request_timeout       = 60
+    probe_name            = local.probe_name
   }
 
   request_routing_rule {
@@ -64,5 +66,15 @@ resource "azurerm_application_gateway" "this" {
     http_listener_name         = local.http_listener_name
     backend_address_pool_name  = local.backend_address_pool_name
     backend_http_settings_name = local.backend_http_settings_name
+  }
+
+  probe {
+    name                = local.probe_name
+    host                = "127.0.0.1"
+    protocol            = "Http"
+    path                = "/api/v1/student/hello"
+    interval            = 90
+    timeout             = 90
+    unhealthy_threshold = 3
   }
 }

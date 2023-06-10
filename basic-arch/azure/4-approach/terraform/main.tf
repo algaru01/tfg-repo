@@ -48,6 +48,8 @@ module "ss" {
 
   ss_subnet = module.vnet.private_subnets[0]
 
+  number_instances = 2
+
   ag_backend_address_pool_id = module.ag.ag_backend_address_pool.id
 
   db_address  = module.db.db_address

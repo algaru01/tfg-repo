@@ -232,8 +232,8 @@ resource "azurerm_network_security_group" "db" {
   location            = var.location
 
   security_rule {
-    name                       = "Server"
-    description                = "Allow traffic to server."
+    name                       = "DB"
+    description                = "Allow traffic to database."
     priority                   = 1002
     access                     = "Allow"
     protocol                   = "Tcp"

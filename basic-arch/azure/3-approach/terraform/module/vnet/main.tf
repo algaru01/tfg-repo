@@ -75,21 +75,22 @@ resource "azurerm_network_security_group" "db" {
   location            = var.location
 
   security_rule {
-    name                       = "Server"
-    description                = "Allow traffic to server."
+    name                       = "DB"
+    description                = "Allow traffic to database."
     priority                   = 1002
     access                     = "Allow"
     protocol                   = "Tcp"
     direction                  = "Inbound"
     source_port_range          = "*"
     source_address_prefix      = "*"
-    destination_port_range     = 5432
+    destination_port_range     = 5432 #Port where Azure Postgresql works
     destination_address_prefix = "*"
   }
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
   count                     = length(var.public_subnets)
+
   subnet_id                 = element(azurerm_subnet.public[*].id, count.index)
   network_security_group_id = azurerm_network_security_group.allow_http_ssh[0].id
 }

@@ -13,6 +13,11 @@ variable "ss_subnet" {
   type        = string
 }
 
+variable "number_instances" {
+  description = "Number of instances to deploy."
+  type        = number
+}
+
 variable "server_port" {
   description = "Port where the server will run."
   type        = number

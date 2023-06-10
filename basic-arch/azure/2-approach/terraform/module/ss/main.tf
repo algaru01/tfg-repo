@@ -5,7 +5,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   location            = var.location
 
   instances      = var.number_instances
-  sku            = "Standard_B1ls"
+  sku            = "Standard_B1s"
   admin_username = "ubuntu"
 
   source_image_reference {
