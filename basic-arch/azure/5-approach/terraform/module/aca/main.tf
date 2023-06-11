@@ -9,6 +9,7 @@ resource "azurerm_log_analytics_workspace" "this" {
   name                = "acr-log"
   location            = var.location
   resource_group_name = var.resource_group_name
+
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
@@ -17,16 +18,19 @@ resource "azurerm_container_app_environment" "this" {
   name                           = "my-container-environment"
   location                       = var.location
   resource_group_name            = var.resource_group_name
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
+
   infrastructure_subnet_id       = var.subnet
   internal_load_balancer_enabled = true
+
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
 }
 
 
 resource "azurerm_container_app" "products" {
   name                         = "products-container-app"
-  container_app_environment_id = azurerm_container_app_environment.this.id
   resource_group_name          = var.resource_group_name
+
+  container_app_environment_id = azurerm_container_app_environment.this.id
   revision_mode                = "Single"
 
   secret {
@@ -76,7 +80,7 @@ resource "azurerm_container_app" "products" {
 
       env {
         name  = "AUTH_URL"
-        value = azurerm_container_app.auth.latest_revision_fqdn //var.auth_url
+        value = azurerm_container_app.auth.latest_revision_fqdn
       }
     }
   }
