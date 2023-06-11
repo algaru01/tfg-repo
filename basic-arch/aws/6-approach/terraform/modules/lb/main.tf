@@ -12,18 +12,10 @@ resource "aws_lb" "this" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http.id]
   subnets            = var.public_subnets_id
-
-  tags = {
-    Name = "myLoadBalancer"
-  }
 }
 
 resource "aws_security_group" "allow_http" {
   vpc_id = var.vpc_id
-
-  tags = {
-    Name = "myLbSecurityGroup"
-  }
 
   ingress {
     from_port   = local.http_port
@@ -54,10 +46,6 @@ resource "aws_lb_listener" "http" {
       message_body = "404: page not found"
       status_code  = 404
     }
-  }
-
-  tags = {
-    Name = "myLbListener-HTTP"
   }
 }
 

@@ -7,8 +7,8 @@
       "logDriver": "awslogs",
       "options": {
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "${prefix}-service",
-        "awslogs-group": "${prefix}-log-group"
+        "awslogs-stream-prefix": "my-service",
+        "awslogs-group": "my-log-group"
       }
     },
     "network_mode": "awsvpc",

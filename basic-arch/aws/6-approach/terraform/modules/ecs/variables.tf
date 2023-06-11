@@ -23,12 +23,6 @@ variable "lb_sg" {
   type        = string
 }
 
-variable "prefix" {
-  description = "Prefix used for naming instances."
-  type        = string
-  default     = "my"
-}
-
 variable "repository_url" {
   description = "URL of the respository where image used will be recovered from."
   type        = string
