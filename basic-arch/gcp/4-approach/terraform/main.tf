@@ -64,7 +64,7 @@ module "db" {
   db_user     = var.db_user
   db_password = var.db_password
 
-    depends_on = [
+  depends_on = [
     module.vpc
   ]
 }
