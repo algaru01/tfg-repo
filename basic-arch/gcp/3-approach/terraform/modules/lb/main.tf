@@ -1,12 +1,15 @@
 resource "google_compute_forwarding_rule" "this" {
   name = "my-lb-forwarding-rule"
 
-  ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "8080"
-  target                = google_compute_region_target_http_proxy.this.id
+  ip_protocol           = "TCP"
+
   network               = var.vpc
   ip_address            = google_compute_address.this.self_link
+  port_range            = "8080"
+
+  target                = google_compute_region_target_http_proxy.this.id
+  
   network_tier          = "STANDARD"
 }
 

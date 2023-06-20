@@ -4,7 +4,7 @@ resource "google_compute_instance" "this" {
   machine_type = "e2-micro"
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-2004-focal-v20230616"
     }
   }
   network_interface {

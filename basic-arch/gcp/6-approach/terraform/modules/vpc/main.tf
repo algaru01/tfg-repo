@@ -41,7 +41,7 @@ resource "google_compute_subnetwork" "connector" {
   name = "connector-subnet"
 
   network       = google_compute_network.this.id
-  ip_cidr_range = "10.2.0.0/28"
+  ip_cidr_range = "10.3.0.0/28"
 
   private_ip_google_access = true
 }

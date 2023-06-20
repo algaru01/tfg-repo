@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("../../credentials/basic-arch-384210.json")
+  credentials = file(var.service_credentials_location)
 
   project = "basic-arch-384210"
   region  = "europe-southwest1"
