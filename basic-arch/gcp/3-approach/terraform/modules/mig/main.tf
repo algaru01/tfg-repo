@@ -7,7 +7,7 @@ resource "google_compute_instance_template" "this" {
 
   machine_type = "e2-micro"
   disk {
-    source_image = "ubuntu-os-cloud/ubuntu-1804-lts"
+    source_image = "ubuntu-os-cloud/ubuntu-2004-focal-v20230616"
   }
   network_interface {
     subnetwork = var.subnet
