@@ -10,25 +10,25 @@ resource "azurerm_log_analytics_workspace" "this" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
+  sku               = "PerGB2018"
+  retention_in_days = 30
 }
 
 resource "azurerm_container_app_environment" "this" {
-  name                           = "my-container-environment"
-  location                       = var.location
-  resource_group_name            = var.resource_group_name
+  name                = "my-container-environment"
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
   infrastructure_subnet_id       = var.subnet
   internal_load_balancer_enabled = true
 
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
 }
 
 
 resource "azurerm_container_app" "products" {
-  name                         = "products-container-app"
-  resource_group_name          = var.resource_group_name
+  name                = "products-container-app"
+  resource_group_name = var.resource_group_name
 
   container_app_environment_id = azurerm_container_app_environment.this.id
   revision_mode                = "Single"

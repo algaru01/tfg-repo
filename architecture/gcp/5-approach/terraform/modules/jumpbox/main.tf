@@ -1,6 +1,6 @@
 
 resource "google_compute_instance" "jumpbox_host" {
-  name         = "my-jumpbox-host"
+  name = "my-jumpbox-host"
 
   machine_type = "e2-micro"
   boot_disk {

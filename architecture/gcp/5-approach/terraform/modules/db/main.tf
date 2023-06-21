@@ -1,5 +1,5 @@
 resource "google_sql_database_instance" "this" {
-  name             = "my-db-instance"
+  name = "my-db-instance"
 
   database_version = "POSTGRES_13"
   settings {
@@ -19,7 +19,7 @@ resource "google_sql_database_instance" "this" {
 }
 
 resource "google_sql_database" "student" {
-  name     = "student"
+  name = "student"
 
   instance = google_sql_database_instance.this.name
 }

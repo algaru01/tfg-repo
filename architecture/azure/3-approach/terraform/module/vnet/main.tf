@@ -1,8 +1,9 @@
 resource "azurerm_virtual_network" "this" {
   name                = "myVirtualNetwork"
   resource_group_name = var.resource_group_name
-  address_space       = [var.cidr_block]
   location            = var.location
+
+  address_space = [var.cidr_block]
 }
 
 resource "azurerm_subnet" "public" {
@@ -89,7 +90,7 @@ resource "azurerm_network_security_group" "db" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public" {
-  count                     = length(var.public_subnets)
+  count = length(var.public_subnets)
 
   subnet_id                 = element(azurerm_subnet.public[*].id, count.index)
   network_security_group_id = azurerm_network_security_group.allow_http_ssh[0].id

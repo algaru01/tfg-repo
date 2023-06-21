@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 locals {
-  asg_cidr_subnets = [ "10.0.100.0/24", "10.0.101.0/24" ]
+  asg_cidr_subnets = ["10.0.100.0/24", "10.0.101.0/24"]
 }
 
 module "vpc" {
@@ -29,7 +29,7 @@ module "vpc" {
 module "asg" {
   source = "./modules/asg"
 
-  vpc_id            = module.vpc.vpc_id
+  vpc_id  = module.vpc.vpc_id
   subnets = [module.vpc.private_subnets_id[0], module.vpc.private_subnets_id[1]]
 
   server_port = var.server_port

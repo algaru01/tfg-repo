@@ -2,7 +2,7 @@ resource "google_cloud_run_v2_service" "products" {
   name     = "products-cloudrun-service2"
   location = var.location
 
-  ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  ingress = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
 
   template {
     containers {
@@ -61,7 +61,7 @@ resource "google_cloud_run_v2_service" "auth" {
   name     = "auth-cloudrun-service2"
   location = var.location
 
-  ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  ingress = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
 
   template {
     containers {

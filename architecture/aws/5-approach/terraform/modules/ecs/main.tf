@@ -11,7 +11,7 @@ resource "aws_security_group" "allow_from_alb" {
   description = "Allow inbound access only from ALB"
   vpc_id      = var.vpc
 
-    ingress {
+  ingress {
     protocol        = "tcp"
     from_port       = var.auth_server_port
     to_port         = var.auth_server_port
@@ -19,7 +19,7 @@ resource "aws_security_group" "allow_from_alb" {
     security_groups = [var.lb_sg]
   }
 
-    ingress {
+  ingress {
     protocol        = "tcp"
     from_port       = var.products_server_port
     to_port         = var.products_server_port
@@ -60,15 +60,15 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
 }
 
 resource "aws_ecs_task_definition" "auth" {
-  family                   = "my-AUTH-TASK-DEFINITION"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  family             = "my-AUTH-TASK-DEFINITION"
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 
   requires_compatibilities = ["FARGATE"]
 
-  cpu                      = 256
-  memory                   = 2048
+  cpu    = 256
+  memory = 2048
 
-  network_mode             = "awsvpc"
+  network_mode = "awsvpc"
 
   container_definitions = templatefile("${path.cwd}/../files/app.json.tpl", {
     name               = local.auth_task_name
@@ -76,26 +76,26 @@ resource "aws_ecs_task_definition" "auth" {
     tag                = "auth-micro"
     app_port           = var.auth_server_port
     region             = var.region
-    envvars            = {
-                            "DATABASE_ADDRESS" = var.db_address,
-                            "DATABASE_PORT" = var.db_port,
-                            "DATABASE_USER" = var.db_user,
-                            "DATABASE_PASSWORD" = var.db_password
-                         }
-    port               = var.auth_server_port
+    envvars = {
+      "DATABASE_ADDRESS"  = var.db_address,
+      "DATABASE_PORT"     = var.db_port,
+      "DATABASE_USER"     = var.db_user,
+      "DATABASE_PASSWORD" = var.db_password
+    }
+    port = var.auth_server_port
   })
 }
 
 resource "aws_ecs_task_definition" "products" {
-  family                   = "my-PRODUCTS-TASK-DEFINITION2"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  family             = "my-PRODUCTS-TASK-DEFINITION2"
+  execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 
   requires_compatibilities = ["FARGATE"]
 
-  cpu                      = 256
-  memory                   = 2048
+  cpu    = 256
+  memory = 2048
 
-  network_mode             = "awsvpc"
+  network_mode = "awsvpc"
 
   container_definitions = templatefile("${path.cwd}/../files/app.json.tpl", {
     name               = local.products_task_name
@@ -103,25 +103,25 @@ resource "aws_ecs_task_definition" "products" {
     tag                = "products-micro"
     app_port           = var.products_server_port
     region             = var.region
-    envvars            = { 
-                            "DATABASE_ADDRESS" = var.db_address,
-                            "DATABASE_PORT" = var.db_port,
-                            "DATABASE_USER" = var.db_user,
-                            "DATABASE_PASSWORD" = var.db_password,
-                            "AUTH_URL" = var.auth_url
-                         }
-    port               = var.products_server_port
+    envvars = {
+      "DATABASE_ADDRESS"  = var.db_address,
+      "DATABASE_PORT"     = var.db_port,
+      "DATABASE_USER"     = var.db_user,
+      "DATABASE_PASSWORD" = var.db_password,
+      "AUTH_URL"          = var.auth_url
+    }
+    port = var.products_server_port
   })
 }
 
 resource "aws_ecs_service" "auth" {
-  name            = "my-AUTH-SERVICE"
+  name = "my-AUTH-SERVICE"
 
   cluster         = aws_ecs_cluster.staging.id
   task_definition = aws_ecs_task_definition.auth.arn
 
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  launch_type   = "FARGATE"
+  desired_count = 1
 
   network_configuration {
     security_groups = [aws_security_group.allow_from_alb.id]
@@ -139,13 +139,13 @@ resource "aws_ecs_service" "auth" {
 }
 
 resource "aws_ecs_service" "products" {
-  name            = "my-PRODUCTS-SERVICE"
+  name = "my-PRODUCTS-SERVICE"
 
   cluster         = aws_ecs_cluster.staging.id
   task_definition = aws_ecs_task_definition.products.arn
 
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  launch_type   = "FARGATE"
+  desired_count = 1
 
   network_configuration {
     security_groups = [aws_security_group.allow_from_alb.id]

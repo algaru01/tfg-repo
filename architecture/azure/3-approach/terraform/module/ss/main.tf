@@ -13,15 +13,15 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  instances      = var.number_instances
-  
+  instances = var.number_instances
+
   source_image_id = data.azurerm_image.image.id
-  sku            = "Standard_B1s"
+  sku             = "Standard_B1s"
 
   admin_username = "ubuntu"
 
- 
-  
+
+
   network_interface {
     name    = "myNIC"
     primary = true

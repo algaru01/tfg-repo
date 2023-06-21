@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 locals {
-  ecs_cidr_subnets = [ "10.0.100.0/24", "10.0.101.0/24" ]
+  ecs_cidr_subnets = ["10.0.100.0/24", "10.0.101.0/24"]
 }
 
 module "vpc" {

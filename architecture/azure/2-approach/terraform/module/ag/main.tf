@@ -66,8 +66,8 @@ resource "azurerm_application_gateway" "this" {
     backend_http_settings_name = local.backend_http_settings_name
   }
 
-#Por defecto Azure crea un probe así
-/*   probe {
+  #Por defecto Azure crea un probe así
+  /*   probe {
     name                = local.probe_name
     host                = "127.0.0.1"
     protocol            = "Http"
