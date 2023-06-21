@@ -33,6 +33,8 @@ El código desplegado en la imágen es una antigua versión del products service
 * PUT `/api/v1/student/<id_student>` Cambia algún valor de un estudiante a través de sus argumentos.
 * DELETE `/api/v1/student/<id_student>`. Elimina un estudiante.
 
+Este servicio añade automáticamente dos estudiantes al inciar, y hace un reinicio de las tablas al acabar.
+
 ## Recursos
 https://cloud.google.com/vpc/docs/private-services-access?hl=es-419#private-services-supported-services
 https://cloud.google.com/sql/docs/postgres/connect-compute-engine?hl=es-419

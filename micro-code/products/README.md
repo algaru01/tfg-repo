@@ -5,3 +5,5 @@ En total establece los siguientes endpoints.
 * GET `/api/v1/product/`. Devuelve la lista de alumnos en la base de datos.
 * PUT `/api/v1/product/<id_product>` Cambia algún valor de un estudiante a través de sus argumentos.
 * DELETE `/api/v1/student/<id_product>`. Elimina un estudiante.
+
+Este servicio añade automáticamente dos productos al inciar, y hace un reinicio de las tablas al acabar.

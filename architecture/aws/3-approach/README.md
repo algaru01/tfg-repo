@@ -37,3 +37,5 @@ El código desplegado en la imágen es una antigua versión del products service
 * GET `/api/v1/student/`. Devuelve la lista de alumnos en la base de datos.
 * PUT `/api/v1/student/<id_student>` Cambia algún valor de un estudiante a través de sus argumentos.
 * DELETE `/api/v1/student/<id_student>`. Elimina un estudiante.
+
+Este servicio añade automáticamente dos estudiantes al inciar, y hace un reinicio de las tablas al acabar.
