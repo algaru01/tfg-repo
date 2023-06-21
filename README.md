@@ -1,7 +1,7 @@
 # tfg-repo
 
 ## Architecture
-Este directorio contiene la creación de una arquitectura de microservicios a través de distintos niveles en tres entornos _Cloud_, AWS, Azure y GCP. Para ello se hace uso de una herramienta de IaC como es Terraform, al igual que se utiliza Packer para un despliegue de microservicios en el acercamiento 4.
+Este directorio contiene la creación de una arquitectura de microservicios a través de distintos niveles en tres entornos _Cloud_, AWS, Azure y GCP. Para ello se hace uso de una herramienta de IaC como es Terraform, al igual que se utiliza Packer para un despliegue de microservicios en el acercamiento 3.
 El README de cada nivel puede contener información desactualizada. Referirse siempre a su documentación propia en el TFG para conocer con detalle su funcionamiento.
 
 ## Micro-code
