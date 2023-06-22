@@ -13,7 +13,7 @@ resource "azurerm_linux_virtual_machine" "this" {
     version   = "latest"
   }
   network_interface_ids = [
-    azurerm_network_interface.this[0].id,
+    azurerm_network_interface.this[count.index].id,
   ]
   admin_ssh_key {
     username   = "ubuntu"
@@ -30,9 +30,9 @@ resource "azurerm_linux_virtual_machine" "this" {
 }
 
 resource "azurerm_network_interface" "this" {
-  count = var.number_instances != 0 ? 1 : 0
+  count = var.number_instances
 
-  name                = "myLinuxVM-NIC"
+  name                = "myLinuxVM-NIC-${count.index}"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -40,14 +40,14 @@ resource "azurerm_network_interface" "this" {
     name                          = "internal"
     subnet_id                     = var.subnet
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.this[0].id
+    public_ip_address_id          = azurerm_public_ip.this[count.index].id
   }
 }
 
 resource "azurerm_public_ip" "this" {
-  count = var.number_instances != 0 ? 1 : 0
+  count = var.number_instances
 
-  name                = "myLinuxVM-PublicIP"
+  name                = "myLinuxVM-PublicIP-${count.index}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
