@@ -63,8 +63,6 @@ module "aca" {
   db_port     = "5432"
   db_password = var.db_password
   db_user     = var.db_user
-
-  //auth_url = "${module.ag.ag_public_ip}:${module.ag.ag_port}"
 }
 
 module "acr" {
