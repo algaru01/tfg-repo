@@ -1,14 +1,15 @@
 locals {
-  frontend_ip_configuration_name      = "myAG-FrontendIPConfig"
-  products_frontend_port_name         = "myAG-ProductsFrontendPort"
-  auth_frontend_port_name             = "myAG-AuthFrontendPort"
-  products_backend_http_settings_name = "myAG-ProductsBackendHTTPSettings"
-  auth_backend_http_settings_name     = "myAG-AuthBackendHTTPSettings"
-  backend_address_pool_name           = "myAG-BackendAddressPool"
-  products_http_listener_name         = "myAG-ProductsHTTPListener"
-  auth_http_listener_name             = "myAG-AuthHTTPListener"
-  products_probe_name                 = "myAG-products-probe"
-  auth_probe_name                     = "myAG-auth-probe"
+  frontend_ip_configuration_name      = "myAG-frontendIPConfig"
+  frontend_port_name                  = "myAG-frontendPort"
+  products_backend_http_settings_name = "myAG-productsBackendHTTPSettings"
+  auth_backend_http_settings_name     = "myAG-authBackendHTTPSettings"
+  backend_address_pool_name           = "myAG-bckendAddressPool"
+  http_listener_name                  = "myAG-PproductsHTTPListener"
+  products_probe_name                 = "myAG-productsProbe"
+  auth_probe_name                     = "myAG-authProbe"
+  url_path_map_name                   = "myAG-pathMap"
+  product_backend_name                = "myAG-productBackend"
+  auth_backend_name                   = "myAG-authBackend"
 }
 
 resource "azurerm_public_ip" "this" {
@@ -36,7 +37,7 @@ resource "azurerm_application_gateway" "this" {
   }
 
   frontend_port {
-    name = local.products_frontend_port_name
+    name = local.frontend_port_name
     port = 8080
   }
 
@@ -46,9 +47,9 @@ resource "azurerm_application_gateway" "this" {
   }
 
   http_listener {
-    name                           = local.products_http_listener_name
+    name                           = local.http_listener_name
     frontend_ip_configuration_name = local.frontend_ip_configuration_name
-    frontend_port_name             = local.products_frontend_port_name
+    frontend_port_name             = local.frontend_port_name
     protocol                       = "Http"
   }
 
@@ -58,29 +59,29 @@ resource "azurerm_application_gateway" "this" {
 
     priority = 1
 
-    http_listener_name         = local.products_http_listener_name
-    url_path_map_name          = "myPathMap"
+    http_listener_name         = local.http_listener_name
+    url_path_map_name          = local.url_path_map_name
   }
 
   url_path_map {
-    name = "myPathMap"
-
-    default_backend_address_pool_name = "product_backend"
-    default_backend_http_settings_name = local.products_backend_http_settings_name
+    name = local.url_path_map_name
 
     path_rule {
       name  = "product_path_rule"
       paths = ["/api/v1/product/*"]
-      backend_address_pool_name = "product_backend"
+      backend_address_pool_name = local.product_backend_name
       backend_http_settings_name = local.products_backend_http_settings_name
     }
 
     path_rule {
       name = "auth_path_rule"
       paths = ["/api/v1/auth/*"]
-      backend_address_pool_name = "auth_backend"
+      backend_address_pool_name = local.auth_backend_http_settings_name
       backend_http_settings_name = local.auth_backend_http_settings_name
     }
+
+    default_backend_address_pool_name  = local.product_backend_name
+    default_backend_http_settings_name = local.products_backend_http_settings_name
   }
 
   backend_http_settings {
@@ -110,12 +111,12 @@ resource "azurerm_application_gateway" "this" {
   }
 
   backend_address_pool {
-    name         = "product_backend"
+    name         = local.product_backend_name
     ip_addresses = var.backend_ips
   }
 
   backend_address_pool {
-    name         = "auth_backend"
+    name         = local.auth_backend_http_settings_name
     ip_addresses = var.backend_ips
   }
 
