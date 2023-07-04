@@ -27,9 +27,4 @@ build {
     source      = "./demo-1.0.0-SNAPSHOT.jar"
     destination = "/home/ubuntu/src/demo-1.0.0-SNAPSHOT.jar"
   }
-
-/*   post-processor "manifest" {
-    output     = "manifest.json"
-    strip_path = true
-  } */
 }

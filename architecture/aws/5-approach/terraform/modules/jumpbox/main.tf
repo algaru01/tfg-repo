@@ -65,8 +65,4 @@ resource "aws_instance" "jumpbox" {
     network_interface_id = aws_network_interface.this.id
   }
   key_name = aws_key_pair.this.key_name
-
-  tags = {
-    name = "myJumpbox"
-  }
 }

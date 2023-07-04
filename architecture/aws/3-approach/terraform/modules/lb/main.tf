@@ -1,49 +1,38 @@
 locals {
-  http_port     = 80
-  ssh_port      = 22
-  any_port      = 0
-  any_protocol  = -1
-  tcp_protocol  = "tcp"
-  http_protocol = "HTTP"
-  all_ips       = ["0.0.0.0/0"]
+  http_port    = 80
+  ssh_port     = 22
+  any_port     = 0
+  any_protocol = -1
 }
 
 resource "aws_lb" "this" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_http_ssh.id]
   subnets            = var.public_subnets
-
-  tags = {
-    Name = "myLoadBalancer"
-  }
 }
 
 resource "aws_security_group" "allow_http_ssh" {
   vpc_id = var.vpc_id
 
-  tags = {
-    Name = "myLbSecurityGroup"
-  }
-
   ingress {
     from_port   = local.http_port
     to_port     = local.http_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = local.ssh_port
     to_port     = local.ssh_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = local.any_port
     to_port     = local.any_port
     protocol    = local.any_protocol
-    cidr_blocks = local.all_ips
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -51,7 +40,7 @@ resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
 
   port     = local.http_port
-  protocol = local.http_protocol
+  protocol = "HTTP"
 
   default_action {
     type = "fixed-response"
@@ -61,10 +50,6 @@ resource "aws_lb_listener" "http" {
       message_body = "404: page not found"
       status_code  = 404
     }
-  }
-
-  tags = {
-    Name = "myLbListener-HTTP"
   }
 }
 
@@ -82,28 +67,20 @@ resource "aws_lb_listener_rule" "forward_all" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.main.arn
   }
-
-  tags = {
-    Name = "myLbListenerRule-ForwardAll"
-  }
 }
 
 resource "aws_lb_target_group" "main" {
   port     = var.server_port
-  protocol = local.http_protocol
+  protocol = "HTTP"
   vpc_id   = var.vpc_id
 
   health_check {
     path                = "/api/v1/student/hello"
-    protocol            = local.http_protocol
+    protocol            = "HTTP"
     matcher             = "200"
     interval            = 15
     timeout             = 3
     healthy_threshold   = 2
     unhealthy_threshold = 2
-  }
-
-  tags = {
-    Name = "myLbTargetGroup-main"
   }
 }

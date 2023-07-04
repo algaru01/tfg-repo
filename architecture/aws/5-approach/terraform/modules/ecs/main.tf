@@ -2,7 +2,8 @@ locals {
   auth_task_name     = "my-auth-service"
   products_task_name = "my-products-service"
 }
-resource "aws_ecs_cluster" "staging" {
+
+resource "aws_ecs_cluster" "this" {
   name = "my-cluster"
 }
 
@@ -87,7 +88,7 @@ resource "aws_ecs_task_definition" "auth" {
 }
 
 resource "aws_ecs_task_definition" "products" {
-  family             = "my-PRODUCTS-TASK-DEFINITION2"
+  family             = "my-PRODUCTS-TASK-DEFINITION"
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 
   requires_compatibilities = ["FARGATE"]
@@ -117,7 +118,7 @@ resource "aws_ecs_task_definition" "products" {
 resource "aws_ecs_service" "auth" {
   name = "my-AUTH-SERVICE"
 
-  cluster         = aws_ecs_cluster.staging.id
+  cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.auth.arn
 
   launch_type   = "FARGATE"
@@ -141,7 +142,7 @@ resource "aws_ecs_service" "auth" {
 resource "aws_ecs_service" "products" {
   name = "my-PRODUCTS-SERVICE"
 
-  cluster         = aws_ecs_cluster.staging.id
+  cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.products.arn
 
   launch_type   = "FARGATE"

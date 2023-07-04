@@ -32,7 +32,7 @@ module "vm" {
 module "vpc" {
   source = "./modules/vpc"
 
-  subnets = ["10.0.0.0/16"]
+  subnets = ["10.0.0.0/24"]
 
   server_port = var.server_port
 }

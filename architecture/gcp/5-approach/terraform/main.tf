@@ -79,10 +79,10 @@ module "db" {
   ]
 }
 
-/*
+
 module "jumpbox" {
   source = "./modules/jumpbox"
 
   vpc        = module.vpc.vpc
   subnetwork = module.vpc.public_subnets[1]
-} */
+}

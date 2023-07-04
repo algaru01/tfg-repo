@@ -54,29 +54,29 @@ resource "azurerm_application_gateway" "this" {
   }
 
   request_routing_rule {
-    name                       = "myAG-Products-ReqRoutingTable"
-    rule_type                  = "PathBasedRouting"
+    name      = "myAG-Products-ReqRoutingTable"
+    rule_type = "PathBasedRouting"
 
     priority = 1
 
-    http_listener_name         = local.http_listener_name
-    url_path_map_name          = local.url_path_map_name
+    http_listener_name = local.http_listener_name
+    url_path_map_name  = local.url_path_map_name
   }
 
   url_path_map {
     name = local.url_path_map_name
 
     path_rule {
-      name  = "product_path_rule"
-      paths = ["/api/v1/product/*"]
-      backend_address_pool_name = local.product_backend_name
+      name                       = "product_path_rule"
+      paths                      = ["/api/v1/product/*"]
+      backend_address_pool_name  = local.product_backend_name
       backend_http_settings_name = local.products_backend_http_settings_name
     }
 
     path_rule {
-      name = "auth_path_rule"
-      paths = ["/api/v1/auth/*"]
-      backend_address_pool_name = local.auth_backend_http_settings_name
+      name                       = "auth_path_rule"
+      paths                      = ["/api/v1/auth/*"]
+      backend_address_pool_name  = local.auth_backend_http_settings_name
       backend_http_settings_name = local.auth_backend_http_settings_name
     }
 
@@ -85,29 +85,29 @@ resource "azurerm_application_gateway" "this" {
   }
 
   backend_http_settings {
-    name                  = local.products_backend_http_settings_name
+    name = local.products_backend_http_settings_name
 
-    host_name             = var.products_fqdn
-    port                  = 80
+    host_name = var.products_fqdn
+    port      = 80
 
     cookie_based_affinity = "Disabled"
     protocol              = "Http"
     request_timeout       = 60
 
-    probe_name            = local.products_probe_name
+    probe_name = local.products_probe_name
   }
 
   backend_http_settings {
-    name                  = local.auth_backend_http_settings_name
+    name = local.auth_backend_http_settings_name
 
-    host_name             = var.auth_fqdn
-    port                  = 80
+    host_name = var.auth_fqdn
+    port      = 80
 
     cookie_based_affinity = "Disabled"
     protocol              = "Http"
     request_timeout       = 60
 
-    probe_name            = local.auth_probe_name
+    probe_name = local.auth_probe_name
   }
 
   backend_address_pool {

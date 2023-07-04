@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo echo "hola" >> /home/ubuntu/prueba.txt
-
 cat > index.html <<EOF
 <h1>Hello, World</h1>
 EOF

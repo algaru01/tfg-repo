@@ -1,8 +1,3 @@
-locals {
-  tcp_protocol = "tcp"
-  all_ips      = ["0.0.0.0/0"]
-}
-
 resource "aws_key_pair" "this" {
   key_name   = "test_asg"
   public_key = file("${path.cwd}/../../ssh-keys/test_asg.pub")
@@ -16,10 +11,6 @@ resource "aws_launch_template" "this" {
   user_data = filebase64("${path.cwd}/../scripts/init-script.sh")
 
   vpc_security_group_ids = [aws_security_group.allow_http_ssh_icmp.id]
-
-  tags = {
-    Name = "myASGLaunchTemplate"
-  }
 }
 
 resource "aws_autoscaling_group" "this" {
@@ -54,13 +45,13 @@ resource "aws_security_group" "allow_http_ssh_icmp" {
   ingress {
     from_port   = var.server_port
     to_port     = var.server_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = "22"
-    to_port     = "22"
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -79,13 +70,7 @@ resource "aws_security_group" "allow_http_ssh_icmp" {
     protocol    = -1
     cidr_blocks = [var.vpc_cidr_block]
   }
-
-  tags = {
-    Name = "myASGSecurityGroup"
-  }
 }
-
-
 
 data "aws_ami" "ubuntu" {
   most_recent = true

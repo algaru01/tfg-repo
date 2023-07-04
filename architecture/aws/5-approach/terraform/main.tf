@@ -80,9 +80,9 @@ module "db" {
   password = var.db_password
 }
 
-/* module "jumpbox" {
+module "jumpbox" {
   source = "./modules/jumpbox"
 
   vpc_id         = module.vpc.vpc_id
   jumpbox_subnet = module.vpc.public_subnets_id[2]
-} */
+}

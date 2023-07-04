@@ -1,9 +1,5 @@
 resource "aws_vpc" "this" {
   cidr_block = var.cidr_block
-
-  tags = {
-    Name = "myMainVPC"
-  }
 }
 
 resource "aws_subnet" "public" {
@@ -12,18 +8,10 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.public_subnets[count.index]
   map_public_ip_on_launch = true
-
-  tags = {
-    Name = "public-subnet${count.index}"
-  }
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-
-  tags = {
-    Name = "myInternetGateway"
-  }
 }
 
 resource "aws_route_table" "public" {

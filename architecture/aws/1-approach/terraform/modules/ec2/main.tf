@@ -62,6 +62,8 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_network_interface" "this" {
+  count = var.number_instances != null ? var.number_instances : 0
+
   subnet_id       = var.subnet
   security_groups = [aws_security_group.allow_http.id]
 }
@@ -73,7 +75,7 @@ resource "aws_instance" "ec2" {
   ami           = data.aws_ami.ubuntu.id
   network_interface {
     device_index         = 0
-    network_interface_id = aws_network_interface.this.id
+    network_interface_id = aws_network_interface.this[count.index].id
   }
   key_name = aws_key_pair.this.key_name
 
@@ -84,8 +86,4 @@ resource "aws_instance" "ec2" {
             nohup busybox httpd -f -p ${var.server_port} &
             EOF
   user_data_replace_on_change = true
-
-  tags = {
-    name = "MyEC2"
-  }
 }

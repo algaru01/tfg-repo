@@ -1,10 +1,7 @@
 locals {
-  ssh_port      = 22
-  any_port      = 0
-  tcp_protocol  = "tcp"
-  icmp_protocol = "icmp"
-  any_protocol  = -1
-  all_ips       = ["0.0.0.0/0"]
+  ssh_port     = 22
+  any_port     = 0
+  any_protocol = -1
 }
 
 resource "aws_key_pair" "this" {
@@ -27,10 +24,6 @@ resource "aws_launch_template" "this" {
   # Obliga a Terraform a crear una nueva Instancia antes de crear una nueva al actualizar este recurso
   lifecycle {
     create_before_destroy = true
-  }
-
-  tags = {
-    Name = "myASGLaunchTemplate"
   }
 }
 
@@ -57,34 +50,30 @@ resource "aws_security_group" "allow_http_ssh_icmp" {
   ingress {
     from_port   = var.server_port
     to_port     = var.server_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = local.ssh_port
     to_port     = local.ssh_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = local.any_port
     to_port     = local.any_port
     protocol    = local.any_protocol
-    cidr_blocks = local.all_ips
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Al ser ICMP from_port indica el tipo de mensaje y to_port el código. En este caso un echo-request para hacer ping.
   ingress {
     from_port   = 8
     to_port     = 0
-    protocol    = local.icmp_protocol
-    cidr_blocks = local.all_ips
-  }
-
-  tags = {
-    Name = "myASGSecurityGroup"
+    protocol    = "ICMP"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

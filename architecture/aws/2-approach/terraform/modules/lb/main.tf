@@ -1,10 +1,6 @@
 locals {
-  http_port     = 80
-  any_port      = 0
-  any_protocol  = -1
-  tcp_protocol  = "tcp"
-  http_protocol = "HTTP"
-  all_ips       = ["0.0.0.0/0"]
+  any_port     = 0
+  any_protocol = -1
 }
 
 resource "aws_lb" "this" {
@@ -19,25 +15,25 @@ resource "aws_security_group" "allow_http" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = local.http_port
-    to_port     = local.http_port
-    protocol    = local.tcp_protocol
-    cidr_blocks = local.all_ips
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = local.any_port
     to_port     = local.any_port
     protocol    = local.any_protocol
-    cidr_blocks = local.all_ips
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
 
-  port     = local.http_port
-  protocol = local.http_protocol
+  port     = 80
+  protocol = "HTTP"
 
   default_action {
     type = "fixed-response"
@@ -69,20 +65,16 @@ resource "aws_lb_listener_rule" "forward_all" {
 resource "aws_lb_target_group" "main" {
   name     = "my-lb-tg"
   port     = var.server_port
-  protocol = local.http_protocol
+  protocol = "HTTP"
   vpc_id   = var.vpc_id
 
   health_check {
     path                = "/"
-    protocol            = local.http_protocol
+    protocol            = "HTTP"
     matcher             = "200"
     interval            = 15
     timeout             = 3
     healthy_threshold   = 2
     unhealthy_threshold = 2
-  }
-
-  tags = {
-    Name = "myLbTargetGroup-main"
   }
 }

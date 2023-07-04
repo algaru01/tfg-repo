@@ -1,9 +1,5 @@
 resource "aws_vpc" "this" {
   cidr_block = var.cidr_block
-
-  tags = {
-    Name = "myMainVPC"
-  }
 }
 
 resource "aws_subnet" "public" {
@@ -13,10 +9,6 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnets[count.index]
   availability_zone       = var.public_subnets_availability_zone[count.index]
   map_public_ip_on_launch = true
-
-  tags = {
-    Name = "public-subnet${count.index}"
-  }
 }
 
 resource "aws_subnet" "private" {
@@ -26,10 +18,6 @@ resource "aws_subnet" "private" {
   cidr_block              = var.private_subnets[count.index]
   availability_zone       = var.private_subnets_availability_zone[count.index]
   map_public_ip_on_launch = false
-
-  tags = {
-    Name = "private-subnet${count.index}"
-  }
 }
 
 data "aws_availability_zones" "available" {
@@ -38,10 +26,6 @@ data "aws_availability_zones" "available" {
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-
-  tags = {
-    Name = "myInternetGateway"
-  }
 }
 
 resource "aws_route_table" "public" {

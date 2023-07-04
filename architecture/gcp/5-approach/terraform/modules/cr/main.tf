@@ -157,7 +157,7 @@ resource "google_compute_region_network_endpoint_group" "products" {
 }
 
 resource "google_compute_region_network_endpoint_group" "auth" {
-  name                  = "serverless-neg"
+  name                  = "auth-serverless-neg"
   network_endpoint_type = "SERVERLESS"
   region                = google_cloud_run_v2_service.auth.location
   cloud_run {
